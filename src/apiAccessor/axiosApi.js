@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const openAxios = axios.create({
+export default axios.create({
     baseURL: process.env.REACT_APP_AUCTION_API_URL 
 });
 
@@ -10,5 +10,5 @@ const authAxios = axios.create({
     withCredentials: true
 });
 
-export { openAxios, authAxios }
+export { authAxios }
 
