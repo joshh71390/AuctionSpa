@@ -1,7 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;900&family=Open+Sans&display=swap');
+
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+:root{
+  --color-primary: #229486;
+  --color-secondary: #333333;
+  --text-font-primary: 'Montserrat', sans-serif;
+  --text-font-secondary: 'Open Sans', sans-serif;
 }
 
 body {
@@ -11,6 +20,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    rgba(34, 148, 134, 0.26) 0%,
+    rgba(34, 148, 134, 0.26) 55%,
+    white 55%,
+    white 100%
+  );
 }
 
 code {

@@ -1,3 +1,49 @@
 header{
-    padding: 0.5rem 2rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: var(--text-font-primary);
+    font-size: 1.2rem;
+    background-color: white;
 }
+
+.logo-text{
+    color: var(--color-secondary);
+}
+
+.colored{
+    color: var(--color-primary);
+}
+
+.nav-container{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-left: auto;
+}
+
+.nav-element{
+    margin-right: 1.8rem;
+    font-weight: 400;
+    color: var(--color-primary);
+}
+
+.nav-element:hover{
+    cursor: pointer;
+    border-bottom: solid var(--color-primary);
+}
+
+.login-button{
+    outline: none;
+    border-style: none;
+    padding: 0.6rem 1rem;
+    color: white;
+    background-color: #229486;
+    border-radius: 0.25rem;
+    font-family: var(--text-font-primary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
