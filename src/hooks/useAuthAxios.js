@@ -1,9 +1,11 @@
 import { authAxios } from "../apiAccessor/axiosApi";
 import { useEffect } from "react";
 import useAuth from "./useAuth";
+import useRefreshToken from "./useRefreshToken";
 
 const useAuthAxios = () => {
     const { auth } = useAuth();
+    const refresh = useRefreshToken();
 
     useEffect(() => {
         const requestInterceptor = authAxios.interceptors.request.use(
@@ -21,7 +23,7 @@ const useAuthAxios = () => {
                 const prevRequest = error?.config;
                 if (error?.response?.status === 403 && !prevRequest?.sent) {
                     prevRequest.sent = true;
-                    const newToken = "token_placeholder";
+                    const newToken = await refresh();
                     prevRequest.headers['Authorization'] = `Bearer ${newToken}`;
                     return authAxios(prevRequest);
                 }

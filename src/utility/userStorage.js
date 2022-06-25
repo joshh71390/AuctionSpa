@@ -1,13 +1,13 @@
 const user = "user";
+const tokens = "tokens";
 
-const setUser = (response) => {
-    const data = response.data;
+const setUser = (data) => {
+    const { role, username, accessToken, refreshToken } = data;
 
-    const token = data.accessToken;
-    const jwtParams = JSON.parse(Buffer.from(accessToken.split(".")[1], 'base64'));
-    const id = jwtParams.id;
-    const isAdmin = jwtParams.role?.toLowerCase().includes("administrator");
-    const userData = { id: id, isAdmin: isAdmin ?? false };
+    const tokensData = { accessToken: accessToken.token, refreshToken: refreshToken };
+    const isAdmin = role?.toLowerCase() === "administrator" ?? false;
+    const userData = { name: username, isAdmin: isAdmin ?? false };
+    localStorage.setItem(tokens, JSON.stringify(tokensData));
     localStorage.setItem(user, JSON.stringify(userData));
     return userData;
 }
