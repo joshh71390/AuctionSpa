@@ -25,14 +25,16 @@ header{
 }
 
 .nav-element{
-    margin-right: 1.8rem;
+    font-size: 1.2rem;
+    margin-right: 3rem;
     font-weight: 400;
     color: var(--color-primary);
 }
 
 .nav-element:hover{
     cursor: pointer;
-    border-bottom: solid var(--color-primary);
+    border-bottom: solid var(--color-secondary);
+    color: var(--color-secondary);
 }
 
 .login-button{
@@ -45,5 +47,31 @@ header{
     font-family: var(--text-font-primary);
     font-size: 1rem;
     font-weight: 400;
+}
+
+.login-button:hover{
+    cursor: pointer;
+    background-color: var(--color-secondary);
+}
+
+@media(max-width: 50rem){
+    .nav-element{
+        margin-right: 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media(max-width: 30rem){
+    header{
+        font-size: 0.8rem;
+    }
+
+    .nav-element{
+        display: none;
+    }
+
+    .login-button{
+        font-size: 0.8rem;
+    }
 }
 
