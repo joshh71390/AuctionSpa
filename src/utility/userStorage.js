@@ -12,7 +12,10 @@ const setUser = (data) => {
     return userData;
 }
 
-const removeUser = () => localStorage.removeItem(user);
+const removeUser = () => {
+    localStorage.removeItem(user);
+    localStorage.removeItem(tokens);
+};
 
 const getUser = () => JSON.parse(localStorage.getItem(user));
 
