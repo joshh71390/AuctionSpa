@@ -7,6 +7,12 @@ const FilterPanel = () => {
     <section className='filter-panel'>
         <input className='text-input' placeholder='Type in lot name' type={"text"}></input>
         <Toggle/>
+        <div className='filter-option'>
+            filer by: date
+        </div>
+        <div className='filter-option'>
+            filters
+        </div>
     </section>
   )
 }
