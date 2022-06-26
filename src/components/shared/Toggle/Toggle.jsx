@@ -1,25 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './Toggle.css'
 
-const Toggle = () => {
+const Toggle = ({onSale, selectOnSale}) => {
 
-    const [onSaleSelected, selectOnSale] = useState(true);
-    const [soldSelected, selectSold] = useState(false);
-
-    const filterOnSale = () => {
-        selectOnSale(true);
-        selectSold(false);
-    }
-
-    const filterSold = () => {
-        selectOnSale(false);
-        selectSold(true);
-    }
+  const toggle = () => selectOnSale(!onSale);
     
   return (
     <div className='toggle'>
-        <span className={ onSaleSelected ? "option selected" : "option"} onClick={filterOnSale}>on sale</span>
-        <span className={ soldSelected ? "option selected" : "option"} onClick = {filterSold}>sold</span>
+        <span className={ onSale ? "option selected" : "option"} onClick={toggle}>on sale</span>
+        <span className={ !onSale ? "option selected" : "option"} onClick = {toggle}>sold</span>
     </div>
   )
 }

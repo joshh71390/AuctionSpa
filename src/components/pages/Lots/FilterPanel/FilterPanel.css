@@ -7,7 +7,8 @@
     padding: 1.5rem;
     border-radius: 0.5rem;
     color: white;
-    gap: 2rem;
+    gap: 1rem;
+    justify-content: center;
 }
 
 .label{
@@ -18,7 +19,7 @@
 }
 
 .text-input{
-    min-width: 40%;
+    min-width: 35%;
     border-radius: .5rem;
     border-style: none;
     font-size: 1.2rem;
@@ -34,11 +35,96 @@
     padding: 0.4rem 1rem;
     background-color: var(--color-secondary);
     border-radius: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    font-family: var(--text-font-primary);
+    width: 14rem;
 }
 
-@media(max-width: 36rem){
+.filters-toggle{
+   background-color: white;
+   color: var(--color-secondary);
+   width: 10%;
+}
+
+.settings-img{
+    width: 1.4rem;
+    margin-left: 0.6rem;
+}
+
+.dropdown{
+    position: absolute;
+    top: 55px;
+    left: 38%;
+    transform: translateX(-45%);
+    padding: 0.5rem;
+    overflow: hidden;
+    background-color: var(--color-secondary);
+    border-radius: 0.5rem;
+}
+
+.sort-filter{
+    position: relative;
+}
+
+.sort-filter:hover{
+    cursor: pointer;
+}
+
+.dropdown-item{
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    white-space: nowrap;
+}
+
+.dropdown-item:hover{
+    background-color: white;
+    color: var(--color-secondary);
+    border-radius: 0.2rem;
+    cursor: pointer;
+}
+
+@media(max-width: 54rem){
+
+    .sort-filter{
+        display: none;
+    }
+    
+    .filter-option{
+        width: 20%;
+    }
+}
+
+@media(max-width: 40rem){
     .text-input{
         width: 100%;
+    }
+
+    .filter-option{
+        width: 50%;
+    }
+
+    .toggle{
+        min-width: 46.5%;
+    }
+}
+
+@media(max-width: 33rem){
+    .filter-option{
+        min-width: 20%;
+    }
+
+    .toggle{
+        min-width: 45%;
+    }
+}
+
+@media(max-width: 24rem){
+    .filter-option{
+        width: 50%;
+    }
+
+    .toggle{
+        width: 40%;
     }
 }
