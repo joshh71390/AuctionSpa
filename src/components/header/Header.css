@@ -28,13 +28,13 @@ header{
     font-size: 1.2rem;
     margin-right: 3rem;
     font-weight: 400;
-    color: var(--color-primary);
+    color: var(--color-secondary);
 }
 
 .nav-element:hover{
     cursor: pointer;
-    border-bottom: solid var(--color-secondary);
-    color: var(--color-secondary);
+    border-bottom: solid var(--color-primary);
+    color: var(--color-primary);
 }
 
 .login-button{

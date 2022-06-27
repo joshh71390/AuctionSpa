@@ -21,8 +21,7 @@
 .content{
     padding: 1rem;
     border-radius: 0.4rem;
-    background-color: white;
-    width: 80%;
+    background-color: var(--color-secondary);
     transform: scale(0.5);
     transition: 0.3s all;
 }

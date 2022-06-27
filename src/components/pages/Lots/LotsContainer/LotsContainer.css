@@ -1,3 +1,22 @@
 .lots-container{
-    padding: 1rem;
+    padding: 2rem;
+}
+
+.filter-optional{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.lots-display-container{
+    
+}
+
+.content-empty{
+    padding: 6rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
 }

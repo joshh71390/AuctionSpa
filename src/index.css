@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+button{
+  outline: none;
+  border-style: none;
+}
+
 :root{
   --color-primary: #229486;
   --color-secondary: #333333;
@@ -22,13 +27,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   min-height: 100vh;
-  background: linear-gradient(
-    to bottom,
-    rgba(34, 148, 134, 0.26) 0%,
-    rgba(34, 148, 134, 0.26) 55%,
-    white 55%,
-    white 100%
-  );
 }
 
 code {

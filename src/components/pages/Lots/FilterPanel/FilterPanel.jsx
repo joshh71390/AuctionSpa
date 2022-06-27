@@ -1,9 +1,9 @@
 import React from 'react'
-import Toggle from '../../../shared/Toggle/Toggle'
 import { useState } from 'react'
-import './FilterPanel.css'
+import PricePicker from './PricePicker/PricePicker'
 import settingsvg from './images/settings.svg'
-import Popup from '../../../shared/Popup/Popup'
+import CategoryPicker from './CategoryPicker/CategoryPicker'
+import './FilterPanel.css'
 
 const filters = [
   {name: 'Date (new first)'},
@@ -13,15 +13,17 @@ const filters = [
 ];
 
 const FilterPanel = () => {
-  const [onSale, selectOnSale] = useState(true);
   const [openSort, setOpenSort] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
+  const [openCategoryFilter, setOpenCategoryFilter] = useState(false);
   const [selectedSort, setSort] = useState(filters[0].name);
+  const [selectedCategory, setCategory] = useState();
 
   return (
     <section className='filter-panel'>
-        <input className='text-input' placeholder='Type in lot name' type={"text"}></input>
-        <Toggle onSale={onSale} selectOnSale={selectOnSale}/>
+        <input className='text-input' placeholder='type in lot name' type={"text"}></input>
+        <PricePicker/>
+        <CategoryPicker categories = {filters}/>
         <div className='filter-option sort-filter' onClick={() => setOpenSort(!openSort)}>
             filter by: <span className='selected-filter'>{selectedSort}</span>
             {openSort &&
@@ -34,11 +36,7 @@ const FilterPanel = () => {
               </ul>
             }
         </div>
-        <div className='filter-option filters-toggle' onClick={() => setOpenFilter(!openFilter)}>
-            filters
-            <img className='settings-img' alt='settings-svg' src={settingsvg}/>
-        </div>
-        <Popup active={openFilter} setActive={setOpenFilter}>dfdsfd</Popup>
+        <button className="apply-button">apply</button>
     </section>
   )
 }

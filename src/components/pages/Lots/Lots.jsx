@@ -5,10 +5,10 @@ import './Lots.css'
 
 const Lots = () => {
   return (
-    <div className='lots-page'>
+      <div className='lots-page'>
       <FilterPanel/>
       <LotsContainer/>
-    </div>
+      </div>
   )
 }
 

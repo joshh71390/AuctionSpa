@@ -1,0 +1,40 @@
+.expand-button{
+    color: var(--color-secondary);
+    font-size: 0.7rem;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.expand-button:hover{
+    cursor: pointer;
+}
+
+.categories-list{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.3rem;
+}
+
+.category-option{
+    display: flex;
+}
+
+.category-selector{
+    width: 1rem;
+    margin-right: 1rem;
+}
+
+input[type=checkbox]{
+    accent-color: var(--color-secondary);
+}
+
+.category-name{
+    text-align: center;
+    align-self: center;
+}
+
+.category-count{
+    color: var(--color-secondary);
+    margin-left: auto;
+}
