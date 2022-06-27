@@ -9,9 +9,9 @@ const PricePicker = () => {
         </div>
         <hr className="line" />
         <label>min:</label>
-        <input type="text" className="price-input"/>
+        <input type="text" className="price-input" placeholder='0'/>
         <label>max:</label>
-        <input type="text" className="price-input" />
+        <input type="text" className="price-input" placeholder='0' />
     </div>
   )
 }

@@ -138,6 +138,7 @@ label{
 }
 
 .apply-button:hover{
+    background-color: #d6d1d1;
     cursor: pointer;
 }
 

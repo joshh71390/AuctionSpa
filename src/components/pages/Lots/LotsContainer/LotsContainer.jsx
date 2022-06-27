@@ -9,6 +9,7 @@ const LotsContainer = () => {
   return (
     <section className='lots-container'>
         <div className="filter-optional">
+        <h4 className='count-total'>Total lots: 0</h4>
         <Toggle onSale={onSale} selectOnSale={selectOnSale}/>
         </div>
         <div className="content-empty">
