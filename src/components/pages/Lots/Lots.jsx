@@ -6,22 +6,22 @@ import { getSaleLots } from '../../../services/lotsService'
 
 const Lots = () => {
   const [lots, setLots] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getLots = async() => {
       const response = await getSaleLots();
-      console.log(response);
       setLots([...response]);
-      console.log(lots);
+      setIsLoading(false);
     }
-
+    
     getLots();
   }, [])
 
   return (
       <div className='lots-page'>
       <FilterPanel/>
-      <LotsContainer lots={lots}/>
+      <LotsContainer lots={lots} isLoading={isLoading}/>
       </div>
   )
 }

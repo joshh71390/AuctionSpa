@@ -7,6 +7,7 @@
     color: white;
     gap: 2rem;
     background-color: white;
+    margin-top: 1rem;
 }
 
 .label{
@@ -24,6 +25,7 @@
     font-family: var(--text-font-primary);
     text-align: center;
     border-bottom: solid var(--color-secondary);
+    margin-bottom: 1.5rem;
 }
 
 .text-input::placeholder{
@@ -37,7 +39,7 @@
     align-self: center;
     padding: 0.4rem 1rem;
     background-color: var(--color-secondary);
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     font-size: 0.8rem;
     font-family: var(--text-font-primary);
     width: 100%;

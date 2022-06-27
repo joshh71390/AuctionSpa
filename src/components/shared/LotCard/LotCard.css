@@ -1,0 +1,51 @@
+.lot-image{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+.lot-card{
+   display: flex;
+   flex-direction: column;
+   font-family: var(--text-font-secondary);
+}
+
+.lot-name{
+    font-size: 1.6rem;
+    font-family: var(--text-font-primary);
+    margin-bottom: 0.2rem;
+}
+
+.lot-description{
+    padding: 0.3rem;
+}
+
+.info-container{
+    display: flex;
+    flex-direction: row;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+}
+
+.bid-button{
+    margin-top: 0.5rem;
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    width: 100%;
+    border-radius: 0.2rem;
+    font-family: var(--text-font-secondary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    align-self: center;
+    color: var(--color-secondary);
+}
+
+.bid-button:hover{
+    background-color: #d6d1d1;
+    cursor: pointer;
+}
+
+.info-value{
+    margin-left: 0.2rem;
+    font-weight: 700;
+}

@@ -3,19 +3,24 @@ import './LotsContainer.css'
 import { useState } from 'react';
 import Toggle from '../../../shared/Toggle/Toggle';
 import LotCard from '../../../shared/LotCard/LotCard';
+import Spinner from '../../../shared/Spinner/Spinner';
 
-const LotsContainer = ({lots}) => {
+const LotsContainer = ({lots, isLoading}) => {
   const [onSale, selectOnSale] = useState(true);
 
   return (
     <section className='lots-container'>
         <div className="filter-optional">
-        <h4 className='count-total'>Total lots: 0</h4>
+        <h4 className='count-total'>Total lots: {lots.length}</h4>
         <Toggle onSale={onSale} selectOnSale={selectOnSale}/>
         </div>
-        <div className="content-empty">
-          Ooops... guess nothing is in here yet
-          {lots.map(lot => <LotCard key={lot.id} lot={lot}/>)}
+        <div className={isLoading ? "spinner-container" : "lots-display-container"}>
+        {isLoading ? <Spinner/> : lots.length === 0 ? 
+            <div className="content-empty">
+            Ooops... guess nothing is in here yet
+            </div>
+          : lots.map(lot => <LotCard key={lot.id} lot={lot}/>
+         )}
         </div>
         </section>
   )

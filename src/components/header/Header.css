@@ -42,7 +42,7 @@ header{
     border-style: none;
     padding: 0.6rem 1rem;
     color: white;
-    background-color: #229486;
+    background-color: var(--color-secondary);
     border-radius: 0.25rem;
     font-family: var(--text-font-primary);
     font-size: 1rem;
@@ -51,7 +51,8 @@ header{
 
 .login-button:hover{
     cursor: pointer;
-    background-color: var(--color-secondary);
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
 }
 
 @media(max-width: 50rem){
