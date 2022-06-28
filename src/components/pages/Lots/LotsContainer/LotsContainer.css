@@ -10,12 +10,14 @@
 }
 
 .content-empty{
+    width: 100%;
     padding: 6rem;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 4rem;
+    font-size: 3rem;
+    opacity: 0.7;
 }
 
 .toggle{
@@ -40,10 +42,20 @@
     .lots-display-container{
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .content-empty{
+        padding: 1rem;
+        font-size: 2rem;
+    }
 }
 
 @media(max-width: 60rem){
     .lots-display-container{
         grid-template-columns: 1fr;
+    }
+
+    .content-empty{
+        padding: 0;
+        font-size: 1.2rem;
     }
 }

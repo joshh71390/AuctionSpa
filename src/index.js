@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContextProvider';
+import { QueryClientProvider } from 'react-query';
+import { queryClient } from './apiAccessor/axiosApi';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <AuthProvider>
         <Routes>
@@ -15,5 +18,6 @@ root.render(
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );

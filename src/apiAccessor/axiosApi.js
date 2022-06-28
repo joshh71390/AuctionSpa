@@ -1,4 +1,5 @@
 import axios from "axios"
+import { QueryClient } from "react-query";
 
 export default axios.create({
     baseURL: process.env.REACT_APP_AUCTION_API_URL 
@@ -10,5 +11,7 @@ const authAxios = axios.create({
     withCredentials: true
 });
 
-export { authAxios }
+const queryClient = new QueryClient();
+
+export { authAxios, queryClient }
 

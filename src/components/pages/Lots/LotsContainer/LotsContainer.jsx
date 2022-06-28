@@ -14,7 +14,8 @@ const LotsContainer = ({lots, isLoading}) => {
         <h4 className='count-total'>Total lots: {lots.length}</h4>
         <Toggle onSale={onSale} selectOnSale={selectOnSale}/>
         </div>
-        <div className={isLoading ? "spinner-container" : "lots-display-container"}>
+        <div className={isLoading ? "spinner-container" : 
+        lots.length === 0 ? "spinner-container" : "lots-display-container"}>
         {isLoading ? <Spinner/> : lots.length === 0 ? 
             <div className="content-empty">
             Ooops... guess nothing is in here yet
