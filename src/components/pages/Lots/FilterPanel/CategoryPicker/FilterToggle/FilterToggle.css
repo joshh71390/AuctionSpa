@@ -1,0 +1,9 @@
+.filter-toggle{
+    font-family: var(--text-font-secondary);
+    padding: 0.2rem;
+}
+
+.filter-toggle:hover{
+    cursor: pointer;
+    background-color: #d6d1d1;
+}

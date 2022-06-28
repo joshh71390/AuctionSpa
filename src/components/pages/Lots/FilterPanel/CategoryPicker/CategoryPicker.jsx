@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom';
+import useItems from '../../../../../hooks/useItems';
 import './CategoryPicker.css'
+import FilterToggle from './FilterToggle/FilterToggle';
 
-const CategoryPicker = ({categories}) => {
+const CategoryPicker = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [search, setSearch] = useSearchParams();
-  const onCategoryChange = (e, category) => {
-    let categories = search.get('categories')?.split(',') ?? [];
+  const [searchCategories, setCategories] = useState(search.get('categories')?.split(',') ?? []);
+  const getItems = useItems();
+  const items = useMemo(() => getItems.data ?? [], [getItems.data]);
+
+  const itemsCount = useMemo(() => 
+  items.reduce((counts, item) => {
+    if (!isNaN(counts[item.category])){
+      counts[item.category] += 1;
+    } else {
+      counts[item.category] = 1;
+    }
+
+    return counts;
+  }, {}), [items]);
+
+  const onCategoryChange = (category) => (e) => {
+    let categories = searchCategories.slice();
 
     if (e.target.checked){
       categories.push(category);
@@ -14,14 +31,10 @@ const CategoryPicker = ({categories}) => {
       categories = categories.filter(c => c !== category);
     }
 
-    if (categories.length === 0){
-      search.delete('categories');
-    } else { 
-      search.set('categories', categories.join(','));
-    }
-
-    setSearch(search);
+    setCategories(categories);
   }
+
+  const checkboxDisabled = search.get('categories') !== null;
 
   return (
     <div>
@@ -32,13 +45,36 @@ const CategoryPicker = ({categories}) => {
       <hr className="line" />
       {showCategories &&
       <div className="categories-list">
-        {Object.keys(categories).length === 0 ? <p className='empty'>No categories available</p> : Object.entries(categories).map(([category, count]) => 
+        {Object.keys(itemsCount).length === 0 ? !getItems.isLoading && <p className='empty'>No categories available</p> 
+        : Object.entries(itemsCount).map(([category, count]) => 
         <div key={category} className='category-option'>
-          <input checked={search.get('categories')?.split(',').includes(category)} onChange={e => onCategoryChange(e, category)} className='category-selector' type={"checkbox"}/>
+          <input 
+            disabled={checkboxDisabled}
+            checked={searchCategories.includes(category)}
+            onChange={onCategoryChange(category)} 
+            className='category-selector' 
+            type={"checkbox"}/>
           <label className='category-name'>{category}</label>
           <span className='category-count'>{count}</span>
         </div>
         )}
+        <FilterToggle 
+          visible={searchCategories.length > 0}
+          active={!!search.get('categories')}
+          onApply={() => {
+            search.set('categories', searchCategories.join(','));
+            setSearch(search, {
+              replace: true
+            });
+          }}
+          onClear={() => {
+            search.delete('categories');
+            setCategories([]);
+            setSearch(search, {
+              replace: true
+            });
+          }}
+        />
       </div>
       }
   </div>

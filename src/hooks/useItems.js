@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const useItems = () => {
     const [search] = useSearchParams({
-        onSale: true,
+        forSale: true,
         sortBy: 'dateDesc'
     });
 

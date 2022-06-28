@@ -1,4 +1,5 @@
 import React from 'react'
+import './FilterToggle.css'
 
 const FilterToggle = ({visible, active, onClear, onApply}) => {
   if (active) {

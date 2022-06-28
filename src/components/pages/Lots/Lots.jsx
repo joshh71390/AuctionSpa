@@ -7,20 +7,10 @@ import useItems from '../../../hooks/useItems'
 const Lots = () => {
   const getItems = useItems();
   const items = useMemo(() => getItems.data ?? [], [getItems.data]);
-  const itemsCount = useMemo(() => 
-  items.reduce((counts, item) => {
-    if (!isNaN(counts[item.category])){
-      counts[item.category] += 1;
-    } else {
-      counts[item.category] = 1;
-    }
-
-    return counts;
-  }, {}), [items]);
 
   return (
       <div className='lots-page'>
-      <FilterPanel categories={itemsCount}/>
+      <FilterPanel/>
       <LotsContainer lots={items} isLoading={getItems.isLoading}/>
       </div>
   )

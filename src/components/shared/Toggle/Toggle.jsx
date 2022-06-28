@@ -1,9 +1,25 @@
 import React from 'react'
 import './Toggle.css'
+import { useSearchParams } from 'react-router-dom';
 
 const Toggle = ({onSale, selectOnSale}) => {
+  const [search, setSearch] = useSearchParams();
 
-  const toggle = () => selectOnSale(!onSale);
+  const toggle = () => {
+    if (search.get('forSale') === null){
+      search.set('forSale', false);
+      setSearch(search, {
+        replace: true
+      });
+    } else {
+      search.set('forSale', !onSale);
+      setSearch(search, {
+        replace: true
+      });
+    }
+    
+    selectOnSale(!onSale);
+  }
     
   return (
     <div className='toggle'>

@@ -14,7 +14,7 @@ const filters = [
   {name: 'Price (lower first)', value: 'priceAsc'}
 ];
 
-const FilterPanel = ({categories}) => {
+const FilterPanel = () => {
   const [openSort, setOpenSort] = useState(false);
   const [selectedSort, setSort] = useState("");
   const [search, setSearch] = useSearchParams();
@@ -46,7 +46,7 @@ const FilterPanel = ({categories}) => {
     <section className='filter-panel'>
         <input className='text-input' placeholder='type in lot name' type={"text"} onChange={onSearchChange}></input>
         <PricePicker/>
-        <CategoryPicker categories = {categories}/>
+        <CategoryPicker/>
         <div className='filter-option sort-filter' onClick={() => setOpenSort(!openSort)}>
             filter by: <span className='selected-filter'>{selectedSort}</span>
             {openSort &&
