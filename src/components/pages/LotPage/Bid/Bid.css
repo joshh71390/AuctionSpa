@@ -1,0 +1,37 @@
+.bid-card{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 1rem;
+    font-family: var(--text-font-secondary);
+    font-weight: 400;
+    align-items: center;
+    border: solid white;
+}
+
+.bid-card:hover{
+    border: solid var(--color-secondary);
+}
+
+.bidder{
+    font-size: 1.2rem;
+}
+
+.placement-date{
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.bid-price{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+    font-size: 0.9rem;
+}
+
+.price-title{
+    margin-right: 0.5rem;
+    font-size: 1rem;
+    font-weight: 400;
+}

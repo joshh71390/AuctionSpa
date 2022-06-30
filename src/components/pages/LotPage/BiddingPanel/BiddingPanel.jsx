@@ -1,8 +1,20 @@
 import moment from 'moment'
-import React from 'react'
+import React, { useMemo } from 'react'
+import Bid from '../Bid/Bid';
+import { Link } from 'react-router-dom'
 import './BiddingPanel.css'
 
 const BiddingPanel = ({lot}) => {
+  const bids = useMemo(() => lot.bids ?? [], lot.bids);
+
+  const getAllowedBidAction = () => {
+    const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
+    return lot.openDate > currentTime ? 
+    "Auction not started" :
+     lot.closeDate > currentTime ?
+     "Place bid" : "Auction is over";
+  }
+
   return (
     <>
     <div className="lot-bidding-panel">
@@ -14,10 +26,10 @@ const BiddingPanel = ({lot}) => {
         </div>
         <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
             <h3 className="bidding-detail-title">Bids: </h3>
-            <span className="bidding-detail">12</span>
+            <span className="bidding-detail">{bids.length}</span>
         </div>
         </div>
-        <hr className="line" style={{'background-color': 'white', 'width': '100%'}} />
+        <hr className="line" style={{'backgroundColor': 'white', 'width': '100%', 'marginBottom': '0'}} />
         <div className="bid-requirement-container">
         <div className="bidding-detail-container">
             <h3 className="bidding-detail-title">Minimum bid amount: </h3>
@@ -33,11 +45,12 @@ const BiddingPanel = ({lot}) => {
         </div>
         </div>
     </div>
-    <button className="bidding-button" disabled={true}>Place bid</button> 
-    <h3 className="bid-auth-warning">only authorized users can take part in bidding</h3> 
+    <button className="bidding-button" disabled={true}>{getAllowedBidAction()}</button> 
+    <h3 className="bid-auth-warning">only authorized users can take part in bidding. <Link to={'/auth'}>Log in now</Link></h3> 
     </div>
     <div className="bidders-container">
-        <h3>Bids</h3>
+        <h3 className='bidders-header'>Bids</h3>
+        {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.map(bid => <Bid bid={bid}/>)}
     </div>
     </>
   )
