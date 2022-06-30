@@ -29,6 +29,8 @@
 }
 
 .text-input::placeholder{
+    font-family: var(--text-font-secondary);
+    font-size: 1.1rem;
     color: rgba(51,51,51,0.4);
 }
 

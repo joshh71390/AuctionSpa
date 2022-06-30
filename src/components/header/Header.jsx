@@ -1,18 +1,18 @@
 import React from 'react'
 import './Header.css'
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
-  const navigate = useNavigate();
-
-  const goToLots = () => navigate("/lots");
-
   return (
     <header className='header'>
+      <Link to={''} style={{textDecoration: 'none'}}>
       <h3 className='logo-text'>Trade<span className='colored'>Me</span></h3>
+      </Link>
       <div className='nav-container'>
       <button className='login-button'>SIGN IN</button>
-      <h3 className='nav-element' onClick={goToLots}>LOTS</h3>
+      <Link to={'lots'} style={{textDecoration: 'none'}}>
+      <h3 className='nav-element'>LOTS</h3>
+      </Link>
       <h3 className='nav-element'>OTHER</h3>
       </div>
     </header>

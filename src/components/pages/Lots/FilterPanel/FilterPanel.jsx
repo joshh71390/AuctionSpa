@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
 import PricePicker from './PricePicker/PricePicker'
-import settingsvg from './images/settings.svg'
 import CategoryPicker from './CategoryPicker/CategoryPicker'
 import './FilterPanel.css'
 import { useSearchParams } from 'react-router-dom'
@@ -18,6 +17,7 @@ const FilterPanel = () => {
   const [openSort, setOpenSort] = useState(false);
   const [selectedSort, setSort] = useState("");
   const [search, setSearch] = useSearchParams();
+
   const onSearchChange = debounce((e) => {
     const text = e.target.value;
  

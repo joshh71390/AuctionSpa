@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import LotsContainer from './LotsContainer/LotsContainer'
 import FilterPanel from './FilterPanel/FilterPanel'
 import './Lots.css'
