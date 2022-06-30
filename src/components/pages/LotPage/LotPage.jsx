@@ -3,6 +3,8 @@ import './LotPage.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../../../apiAccessor/axiosApi'
 import CountdownContainer from '../../shared/CountdownContainer/CountdownContainer'
+import moment from 'moment'
+import BiddingPanel from './BiddingPanel/BiddingPanel'
 
 const LotPage = () => {
   const { id } = useParams();
@@ -45,6 +47,11 @@ const LotPage = () => {
           <h1 className='status'>{lot.status}</h1>
         </div>
         <div className="description">
+            <h1 className="description-title">Auction duration:
+            <span className="description-text">{`${moment(lot.openDate).format('LL')} - ${moment(lot.closeDate).format('LL')}`}</span>
+            </h1>
+          </div>
+        <div className="description">
             <h1 className="description-title">Seller:
             <span className="description-text">{lot.seller}</span>
             </h1>
@@ -63,7 +70,7 @@ const LotPage = () => {
       </div>
       </div>
       <div className="bidding-details">
-        fsa
+        <BiddingPanel lot={lot}/>
       </div>
     </div>
   )

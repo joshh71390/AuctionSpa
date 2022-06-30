@@ -19,3 +19,18 @@
         font-size: 1rem;
     }
 }
+
+@media(max-width: 30rem){
+    .timer-container{
+        flex-direction: column;
+    }
+
+    .countdown-timer{
+        font-size: 0.9rem;
+    }
+
+    .timer-title{
+        margin-bottom: 0.2rem;
+        font-size: 0.7rem;
+    }
+}
