@@ -5,11 +5,14 @@ import RegisterForm from './RegisterForm/RegisterForm';
 
 const AuthPage = () => {
   const [loginViewSelected, setLoginViewSelected] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   return (
     <div className='auth-container'>
       <div className="form-container">
-      <div className="toggle-container">
+      {
+        !submitting && 
+        <div className="toggle-container">
       <h3 
         className={loginViewSelected ? 'auth-option option-selected' : 'auth-option'}
         onClick={() => setLoginViewSelected(true)}
@@ -23,7 +26,10 @@ const AuthPage = () => {
         Register
         </h3>
       </div>
-      {loginViewSelected ? <LoginForm/> : <RegisterForm/>}
+      }
+      {loginViewSelected ? 
+      <LoginForm submitting={submitting} setSubmitting={setSubmitting}/> : 
+      <RegisterForm submitting={submitting} setSubmitting={setSubmitting}/>}
       </div>
     </div>
   )

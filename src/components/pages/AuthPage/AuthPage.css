@@ -3,24 +3,26 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    background: linear-gradient(to bottom right, var(--color-primary), #FFF173);
 }
 
 .form-container{
     padding: 1.5rem;
-    border: solid var(--color-secondary);
+    
+    background-color: white;
 }
 
 .toggle-container{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0 4rem;
-    gap: 2rem;
+    padding: 0 6rem;
+    gap: 3rem;
     margin-bottom: 2rem;
 }
 
 .auth-option{
-    font-family: var(--text-font-primary);
+    font-family: var(--text-font-secondary);
     border-bottom: solid white;
 }
 
@@ -29,6 +31,79 @@
 }
 
 .option-selected{
-    color: var(--color-primary);
-    border-bottom: solid var(--color-primary);
+    border-bottom: solid var(--color-secondary);
+}
+
+.auth-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-label{
+    font-family: var(--text-font-secondary);
+    margin: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.auth-input{
+    outline: none;
+    border-style: none;    
+    background-color: #f0f0f0;
+    padding: 0.3rem;
+    font-size: 1rem;
+    font-family: var(--text-font-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.auth-input:focus{
+    background-color: #d6d1d1;
+}
+
+.auth-submit-button{
+    padding: 0.3rem;
+    font-family: var(--text-font-secondary);
+    font-size: 1rem;
+    margin-top: 1.5rem
+}
+
+.auth-submit-button:hover:valid{
+    cursor: pointer;
+    background-color: #d6d1d1;   
+}
+
+.field-invalid{
+    font-family: var(--text-font-secondary);
+    font-size: 0.75rem;
+    max-width: 20rem;
+    color: red;
+}
+
+.auth-form-field{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.submit-error{
+    font-family: var(--color-secondary);
+    font-size: 0.9rem;
+    background-color: rgb(204, 102, 102);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.submit-success{
+    font-family: var(--color-secondary);
+    font-size: 1.2rem;
+    background-color: rgb(102, 204, 121);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0.5rem;
+    width: 100%;
+    height: 100%;
 }
