@@ -1,9 +1,12 @@
 import React from 'react'
 import './Header.css'
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Header = () => {
-  return (
+  const location = useLocation();
+  console.log(location.pathname);
+  return ( location.pathname === '/auth' ? <></> :
     <header className='header'>
       <Link to={''} style={{textDecoration: 'none'}}>
       <h3 className='logo-text'>Trade<span className='colored'>Me</span></h3>
@@ -13,7 +16,6 @@ const Header = () => {
       <Link to={'lots'} style={{textDecoration: 'none'}}>
       <h3 className='nav-element'>LOTS</h3>
       </Link>
-      <h3 className='nav-element'>OTHER</h3>
       </div>
     </header>
   )

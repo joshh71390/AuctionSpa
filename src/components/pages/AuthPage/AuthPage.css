@@ -1,0 +1,34 @@
+.auth-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.form-container{
+    padding: 1.5rem;
+    border: solid var(--color-secondary);
+}
+
+.toggle-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 4rem;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.auth-option{
+    font-family: var(--text-font-primary);
+    border-bottom: solid white;
+}
+
+.auth-option:hover{
+    cursor: pointer;
+}
+
+.option-selected{
+    color: var(--color-primary);
+    border-bottom: solid var(--color-primary);
+}

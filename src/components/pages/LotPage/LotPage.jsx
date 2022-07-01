@@ -5,10 +5,12 @@ import axios from '../../../apiAccessor/axiosApi'
 import CountdownContainer from '../../shared/CountdownContainer/CountdownContainer'
 import moment from 'moment'
 import BiddingPanel from './BiddingPanel/BiddingPanel'
+import Spinner from '../../shared/Spinner/Spinner'
 
 const LotPage = () => {
   const { id } = useParams();
   const [lot, setLot] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,12 +18,15 @@ const LotPage = () => {
   },[])
 
   const getLot = async () => {
-    const response = await axios.get(`lots/${id}`)
-    .then(response => response.data);
-    setLot(response);
+    try {
+      const response = await axios.get(`lots/${id}`)
+      .then(response => response.data);
+      setLot(response);
+      setIsLoading(false);
+    } catch { navigate(-1); }
   }
 
-  return (
+  return (isLoading ? <div className="loading-container"><Spinner/></div> :
     <div className="page-lot-container">
       <div className="lot-page-header">
         <h1 className='go-back-button' onClick={() => navigate(-1)}>go back</h1>

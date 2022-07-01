@@ -117,6 +117,14 @@
     margin-left: 0.5rem;
 }
 
+.loading-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 50vh;
+}
+
 @media(max-width: 75rem){
     .page-lot-container{
         padding: 2rem 4rem;
