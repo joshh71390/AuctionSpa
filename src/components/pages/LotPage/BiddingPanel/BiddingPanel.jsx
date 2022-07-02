@@ -50,7 +50,7 @@ const BiddingPanel = ({lot}) => {
     </div>
     <div className="bidders-container">
         <h3 className='bidders-header'>Bids</h3>
-        {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.map(bid => <Bid bid={bid}/>)}
+        {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.map(bid => <Bid key={bid.id} bid={bid}/>)}
     </div>
     </>
   )

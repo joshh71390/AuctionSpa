@@ -6,7 +6,7 @@ import useAuth  from '../../../../hooks/useAuth'
 import axios from '../../../../apiAccessor/axiosApi';
 
 const LoginForm = ({submitting, setSubmitting}) => {
-    const { setAuth } = useAuth();
+    const { signIn } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,12 +27,7 @@ const LoginForm = ({submitting, setSubmitting}) => {
                     withCredentials: true
                 }
             );
-            console.log(response.data);
-            const { role, username, accessToken, refreshToken} = response.data;
-            const tokens = { accessToken: accessToken.token, refreshToken: refreshToken };
-            const isAdmin = role.toLowerCase() === "administrator" ?? false;
-            console.log({tokens, isAdmin});
-            setAuth({username, isAdmin, tokens});
+            signIn(response.data);
             setEmail('');
             setPassword('');
             navigate(from, {replace: true});

@@ -1,7 +1,7 @@
 const user = "user";
 const tokens = "tokens";
 
-const setUser = (data) => {
+const setUserInStorage = (data) => {
     const { role, username, accessToken, refreshToken } = data;
 
     const tokensData = { accessToken: accessToken.token, refreshToken: refreshToken };
@@ -12,11 +12,18 @@ const setUser = (data) => {
     return userData;
 }
 
-const removeUser = () => {
+const removeUserFromStorage = () => {
     localStorage.removeItem(user);
     localStorage.removeItem(tokens);
 };
 
-const getUser = () => JSON.parse(localStorage.getItem(user));
+const getUserFromStorage = () => JSON.parse(localStorage.getItem(user));
 
-export { setUser, removeUser, getUser }
+const getTokensFromStorage = () => JSON.parse(localStorage.getItem(tokens));
+
+export { 
+    setUserInStorage,
+    removeUserFromStorage,
+    getUserFromStorage,
+    getTokensFromStorage
+ }

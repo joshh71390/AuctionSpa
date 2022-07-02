@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 const Header = () => {
-  const { auth } = useAuth();
+  const { currentUser } = useAuth();
   const location = useLocation();
 
   return ( location.pathname === '/auth' ? <></> :
@@ -15,7 +15,7 @@ const Header = () => {
       </Link>
       <div className='nav-container'>
       <Link to={'/auth'}>
-      <button className='login-button'>{auth.username ? `Hi, ${auth.username}` : 'SIGN IN'}</button>
+      <button className='login-button'>{currentUser ? `Hi, ${currentUser.name}` : 'SIGN IN'}</button>
       </Link>
       <Link to={'lots'} style={{textDecoration: 'none'}}>
       <h3 className='nav-element'>LOTS</h3>
