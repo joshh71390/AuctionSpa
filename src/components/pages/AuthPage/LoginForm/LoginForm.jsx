@@ -1,7 +1,7 @@
 import React from 'react'
 import Spinner from '../../../shared/Spinner/Spinner'
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAuth  from '../../../../hooks/useAuth'
 import axios from '../../../../apiAccessor/axiosApi';
 
@@ -9,8 +9,6 @@ const LoginForm = ({submitting, setSubmitting}) => {
     const { signIn } = useAuth();
 
     const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,7 +28,7 @@ const LoginForm = ({submitting, setSubmitting}) => {
             signIn(response.data);
             setEmail('');
             setPassword('');
-            navigate(from, {replace: true});
+            navigate(-1);
         } catch (error) {
             setError('Login failed');
         } finally {

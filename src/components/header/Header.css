@@ -55,6 +55,23 @@ header{
     color: var(--color-secondary);
 }
 
+.user-navigate{
+    position: relative;
+    outline: none;
+    border-style: none;
+    padding: 0.6rem 1rem;
+    color: white;
+    background-color: var(--color-secondary);
+    border-radius: 0.25rem;
+    font-family: var(--text-font-primary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.user-navigate:hover{
+    cursor: pointer;
+}
+
 @media(max-width: 50rem){
     .nav-element{
         margin-right: 2rem;
@@ -72,6 +89,10 @@ header{
     }
 
     .login-button{
+        font-size: 0.8rem;
+    }
+
+    .user-navigate{
         font-size: 0.8rem;
     }
 }

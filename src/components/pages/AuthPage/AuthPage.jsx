@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import useAuth from '../../../hooks/useAuth';
 import './AuthPage.css'
 import LoginForm from './LoginForm/LoginForm';
 import RegisterForm from './RegisterForm/RegisterForm';
 
 const AuthPage = () => {
+  const { currentUser } = useAuth();
+
   const [loginViewSelected, setLoginViewSelected] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
