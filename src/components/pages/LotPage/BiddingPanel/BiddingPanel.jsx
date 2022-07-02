@@ -3,17 +3,20 @@ import React, { useMemo } from 'react'
 import Bid from '../Bid/Bid';
 import { Link } from 'react-router-dom'
 import './BiddingPanel.css'
+import useAuth from '../../../../hooks/useAuth'
 
 const BiddingPanel = ({lot}) => {
-  const bids = useMemo(() => lot.bids ?? [], lot.bids);
+    const { currentUser } = useAuth();
 
-  const getAllowedBidAction = () => {
-    const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
-    return lot.openDate > currentTime ? 
-    "Auction not started" :
-     lot.closeDate > currentTime ?
-     "Place bid" : "Auction is over";
-  }
+    const bids = useMemo(() => lot.bids ?? [], lot.bids);
+
+    const getAllowedBidAction = () => {
+        const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
+        return lot.openDate > currentTime ? 
+        "Auction not started" :
+        lot.closeDate > currentTime ?
+        "Place bid" : "Auction is over";
+    }
 
   return (
     <>
@@ -45,8 +48,19 @@ const BiddingPanel = ({lot}) => {
         </div>
         </div>
     </div>
-    <button className="bidding-button" disabled={true}>{getAllowedBidAction()}</button> 
-    <h3 className="bid-auth-warning">only authorized users can take part in bidding. <Link to={'/auth'}>Log in now</Link></h3> 
+    <button 
+        className="bidding-button" 
+        disabled={
+            !currentUser || lot.openDate > moment().toISOString() ||
+            lot.closeDate < moment().toISOString() ? true : false
+        }
+    >
+        {getAllowedBidAction()}
+    </button> 
+    {
+        !currentUser && 
+        <h3 className="bid-auth-warning">only authorized users can take part in bidding. <Link to={'/auth'}>Log in now</Link></h3> 
+    }
     </div>
     <div className="bidders-container">
         <h3 className='bidders-header'>Bids</h3>

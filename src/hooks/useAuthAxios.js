@@ -4,14 +4,14 @@ import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
 
 const useAuthAxios = () => {
-    const { auth } = useAuth();
+    const { tokens } = useAuth();
     const refresh = useRefreshToken();
 
     useEffect(() => {
         const requestInterceptor = authAxios.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
+                    config.headers['Authorization'] = `Bearer ${tokens?.accessToken}`;
                 }
                 return config;
             }, (error) => Promise.reject(error)
@@ -35,7 +35,7 @@ const useAuthAxios = () => {
             authAxios.interceptors.request.eject(requestInterceptor);
             authAxios.interceptors.response.eject(responseInterceptor);
         }
-    }, [auth])
+    }, [tokens])
 
     return authAxios;
 }

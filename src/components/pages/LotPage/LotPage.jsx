@@ -9,7 +9,7 @@ import Spinner from '../../shared/Spinner/Spinner'
 
 const LotPage = () => {
   const { id } = useParams();
-  const [lot, setLot] = useState([]);
+  const [lot, setLot] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 

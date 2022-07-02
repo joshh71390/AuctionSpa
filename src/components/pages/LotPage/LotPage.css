@@ -58,7 +58,7 @@
 }
 
 .page-lot-image{
-    max-width: 60rem;
+    width: 60rem;
 }
 
 .page-lot-line{
@@ -125,7 +125,7 @@
     min-height: 50vh;
 }
 
-@media(max-width: 75rem){
+@media(max-width: 78rem){
     .page-lot-container{
         padding: 2rem 4rem;
     }
