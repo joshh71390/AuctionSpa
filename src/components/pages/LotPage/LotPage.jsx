@@ -29,7 +29,7 @@ const LotPage = () => {
   return (isLoading ? <div className="loading-container"><Spinner/></div> :
     <div className="page-lot-container">
       <div className="lot-page-header">
-        <h1 className='go-back-button' onClick={() => navigate(-1)}>go back</h1>
+        <h1 className='go-back-button' onClick={() => navigate('/lots', {replace: true})}>go back</h1>
         <div className="countdown-container">
           <div className="countdown">
             <CountdownContainer openDate={lot.openDate} closeDate={lot.closeDate}/>

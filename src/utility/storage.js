@@ -6,10 +6,11 @@ const setUserInStorage = (data) => {
 
     const tokensData = { accessToken: accessToken.token, refreshToken: refreshToken };
     const isAdmin = role?.toLowerCase() === "administrator" ?? false;
-    const userData = { id: id, name: username, role: role, isAdmin: isAdmin ?? false };
+    const name = username.split(/(?=[A-Z])/).join(' ');
+    const userData = { id: id, name, role: role, isAdmin: isAdmin ?? false };
     localStorage.setItem(tokens, JSON.stringify(tokensData));
     localStorage.setItem(user, JSON.stringify(userData));
-    return userData;
+    return {userData, tokensData};
 }
 
 const removeUserFromStorage = () => {

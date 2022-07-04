@@ -1,21 +1,67 @@
 import moment from 'moment'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Bid from '../Bid/Bid';
 import { Link } from 'react-router-dom'
 import './BiddingPanel.css'
 import useAuth from '../../../../hooks/useAuth'
+import Popup from '../../../shared/Popup/Popup'
+import Spinner from '../../../shared/Spinner/Spinner'
+import useAuthAxios from '../../../../hooks/useAuthAxios'
+import successIcon from '../../../../images/success-icon.svg'
 
 const BiddingPanel = ({lot}) => {
     const { currentUser } = useAuth();
+    const authAxios = useAuthAxios();
 
-    const bids = useMemo(() => lot.bids ?? [], lot.bids);
+    const bids = useMemo(() => lot.bids.sort((a,b) => b.price - a.price) ?? [], lot.bids);
+    const highestBid = useMemo(() => bids[0] ?? null, bids);
+
+    const [bidWindowOpen, setBidWindowOpen] = useState(false);
+    const [bidAmount, setBidAmount] = useState(0);
+    const [bidValid, setBidValid] = useState(false);
+    const [bidding, setBidding] = useState(false);
+    const [succeed, setSucceed] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (error.length !== 0) setError('');
+        const allowed = highestBid?.price + lot.minimalBid;
+        const bidHigher = bidAmount > allowed && bidAmount < 1000000;
+        setBidValid(bidHigher);
+    }, [bidAmount])
+
+    const handleBidPlacement = async() => {
+        setBidding(true);
+
+        try {
+            const response = await authAxios.post('/bidding/place',
+            JSON.stringify({lotId: lot.id, price: new Number(bidAmount)}));
+            
+            const bid = {
+                id: response.data, 
+                price: bidAmount,
+                placedOn: new Date(),
+                bidderId: currentUser.id,
+                bidder: currentUser.name}
+            
+            lot.bids.push(bid);
+            lot.currentBid = bidAmount;
+            setSucceed(true);
+            setBidAmount(0);
+        } catch {
+            setError('Failed to place bid');
+        } finally {
+            setBidding(false);
+        }
+    }
 
     const getAllowedBidAction = () => {
+        const sameBidder = highestBid?.bidderId === currentUser?.id;
+        if (sameBidder) return "Your bid is the highest one";
         const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
-        return lot.openDate > currentTime ? 
-        "Auction not started" :
-        lot.closeDate > currentTime ?
-        "Place bid" : "Auction is over";
+        const action = lot.openDate > currentTime ? "Auction not started" :
+        lot.closeDate > currentTime ? "Place bid" : "Auction is over";
+        return action;
     }
 
   return (
@@ -44,16 +90,19 @@ const BiddingPanel = ({lot}) => {
         </div>
         <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
             <h3 className="bidding-detail-title">Last bidded on: </h3>
-            <span className="bidding-detail">{moment().format('LL')}</span>
+            <span className="bidding-detail">
+                {highestBid?.placedOn ? moment(highestBid.placedOn).format('LL') : "none"}
+            </span>
         </div>
         </div>
     </div>
     <button 
         className="bidding-button" 
         disabled={
-            !currentUser || lot.openDate > moment().toISOString() ||
-            lot.closeDate < moment().toISOString() ? true : false
+            lot.openDate > moment().toISOString() || lot.closeDate < moment().toISOString()
+            || !currentUser || highestBid.bidderId === currentUser.id ? true : false
         }
+        onClick={() => setBidWindowOpen(true)}
     >
         {getAllowedBidAction()}
     </button> 
@@ -66,6 +115,47 @@ const BiddingPanel = ({lot}) => {
         <h3 className='bidders-header'>Bids</h3>
         {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.map(bid => <Bid key={bid.id} bid={bid}/>)}
     </div>
+    <Popup active={bidWindowOpen} setActive={setBidWindowOpen}>
+        {
+        bidding ? <div className='spinner-container'><Spinner/></div> : 
+        succeed ? 
+        <div className='bidding-success'>
+            <img style={{'width': '5rem'}} src={successIcon} alt="success-svg" />
+            <p className="bid-auth-warning" style={{'width': '100%', 'padding' : '1rem'}}>Your bid successfully registered</p>
+        </div>
+        :
+        <div className="popup-container">
+        <div className="popup-header">
+            <h3 className="popup-detail">Current bid: <span style={{'fontWeight' : '700'}}>{lot.currentBid}</span></h3>
+            <h3 className="popup-detail">Minimal bid: <span style={{'fontWeight' : '700'}}>{lot.minimalBid}</span></h3>
+        </div>
+        {error.length !== 0 && <p className='submit-error' style={{'width' : '100%'}}>{error}</p>}
+        <div className="price-container">
+        <h3 className='price-input-label'>Amount: </h3>
+        <input 
+          type="text" 
+          className="price-input" 
+          placeholder='0'
+          value={bidAmount}
+          onChange={e => setBidAmount(e.target.value)}
+          style={{'width': 'auto'}}
+          />
+        </div>
+        {
+            !bidValid && 
+            <p className="bid-auth-warning" style={{'width': '20rem', 'fontSize': '0.8rem'}}>
+                Must be higher than current bid plus minimal bid requirement. Highest
+                allowed bid: 1 million
+            </p> 
+        }
+        <button 
+            disabled={bidValid ? false : true} 
+            className="bidding-button"
+            onClick={handleBidPlacement}
+            >Place bid</button>
+        </div>
+        }
+    </Popup>
     </>
   )
 }

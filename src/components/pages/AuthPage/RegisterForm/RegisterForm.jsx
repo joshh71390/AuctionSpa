@@ -83,7 +83,6 @@ const RegisterForm = ({submitting, setSubmitting}) => {
             setBirthDate('');
             setSuccess(true);
         } catch (error) {
-            console.log(error);
             if (!error?.response){
                 setError('No server response');
             } else {

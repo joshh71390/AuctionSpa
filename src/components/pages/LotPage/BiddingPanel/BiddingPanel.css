@@ -87,6 +87,47 @@
     align-self: center;
 }
 
+.popup-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4rem;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+}
+
+.popup-detail{
+    font-family: var(--text-font-secondary);
+    font-weight: 400;
+}
+
+.price-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.price-input-label{
+    font-family: var(--text-font-secondary);
+    margin-right: 1rem;
+}
+
+.popup-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bidding-success{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
 @media(max-width: 75rem){
     .bidding-detail-container{
         padding: 0.9rem 2rem;

@@ -35,13 +35,15 @@ const useAuthState = () => {
     }, [tokens])
 
     const signIn = (data) => {
-        const user = setUserInStorage(data);
-        setUser(user);
+        const {userData, tokensData} = setUserInStorage(data);
+        setUser(userData);
+        setTokens(tokensData);
     }
     
     const signOut = () => {
         removeUserFromStorage();
         setUser(null);
+        setTokens(null);
     }
 
     const changeTokens = (newTokens) => {
