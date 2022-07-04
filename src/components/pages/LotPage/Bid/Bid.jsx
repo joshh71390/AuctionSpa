@@ -7,7 +7,7 @@ const Bid = ({bid}) => {
     <div className='bid-card'>
         <div className="bidder-info">
             <h2 className="bidder">{bid.bidder}</h2>
-            <h2 className='placement-date'>{moment(bid.placedOn).format('LLL')}</h2>
+            <h2 className='placement-date'>{moment(bid.placedOn).utc(true).local().format('LLL')}</h2>
         </div>
         <div className="bid-price">
             <h2 className="price-title">Amount:</h2>

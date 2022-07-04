@@ -3,16 +3,16 @@ import moment from "moment";
 
 export function useCounter({openDate, closeDate}) {
     const [counter, setCounter] = useState(null);
-    const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
+    const currentTime = moment().utc(true).local().toISOString("dd/mm/yyyy HH:mm");
     const currentUtcTime = moment().utc().toISOString("dd/mm/yyyy HH:mm");
   
     useEffect(() => {
       let duration;
       if (openDate > currentTime) {
-        let eventTime = moment.utc(openDate).local();
+        let eventTime = moment(openDate).utc(true).local();
         duration = moment.duration(eventTime.diff(currentTime));
       } else if (openDate < currentTime && closeDate > currentTime) {
-        let eventTime = moment.utc(closeDate).local();
+        let eventTime = moment(closeDate).utc(true).local();
         duration = moment.duration(eventTime.diff(currentTime));
       }
   
