@@ -1,0 +1,92 @@
+.admin-lot-container{
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.lot-details-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-details-container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0 0 2rem 1rem;
+}
+
+.admin-detail-label{
+    font-family: var(--text-font-secondary);
+    max-width: 30rem;
+}
+
+.admin-detail{
+    font-weight: 400;
+}
+
+.edit-button{
+    margin-top: 1rem;
+    padding: 0.5rem;
+    width: 50%;
+    align-self: center;
+    font-family: var(--text-font-secondary);
+}
+
+.edit-button:hover{
+    cursor: pointer;
+    background-color: #d6d1d1;
+}
+
+.lot-details-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem 0 0 1.5rem;
+    gap: 2rem;
+}
+
+.setting-container{
+    font-family: var(--text-font-secondary);
+    background-color: var(--color-secondary);
+    border-radius: 0.3rem;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.admin-countdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 0 0.5rem 1rem;
+}
+
+.settings-toggle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    border-left: 0.2rem solid white;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.settings-toggle:hover{
+    cursor: pointer;
+}
+
+.delete-lot-button{
+    font-family: var(--text-font-secondary);
+    background-color: #CC5C5C;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.3rem;
+    font-size: 1rem;
+}
+
+.delete-lot-button:hover{
+    cursor: pointer;
+}

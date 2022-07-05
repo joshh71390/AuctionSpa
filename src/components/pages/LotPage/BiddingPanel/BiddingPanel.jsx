@@ -101,16 +101,17 @@ const BiddingPanel = ({lot}) => {
         </div>
         </div>
     </div>
-    <button 
+    {
+        (currentUser && !currentUser.isAdmin) &&
+        <button 
         className="bidding-button" 
         disabled={
             lot.openDate > moment().toISOString() || lot.closeDate < moment().toISOString()
             || !currentUser || highestBid.bidderId === currentUser.id ? true : false
         }
         onClick={() => setBidWindowOpen(true)}
-    >
-        {getAllowedBidAction()}
-    </button> 
+        >{getAllowedBidAction()}</button>
+    } 
     {
         !currentUser && 
         <h3 className="bid-auth-warning">only authorized users can take part in bidding. <Link to={'/auth'}>Log in now</Link></h3> 

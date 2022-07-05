@@ -24,7 +24,7 @@ const getTokensFromStorage = () => JSON.parse(localStorage.getItem(tokens));
 
 const changeStoredTokens = (newTokens) => {
     localStorage.removeItem(tokens);
-    localStorage.setItem(tokens, newTokens);
+    localStorage.setItem(tokens, JSON.stringify(newTokens));
 }
 
 export { 

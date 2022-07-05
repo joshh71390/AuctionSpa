@@ -18,10 +18,10 @@ const Lot = ({lot, handleSelected}) => {
     )
 }
 
-const LotsList = ({lots}) => {
+const LotsList = ({lots, handleSelected}) => {
   return (
     <section className='lots-list-container'>
-        {lots.map(lot => <Lot key={lot.id} lot={lot}/>)}
+        {lots.map(lot => <Lot key={lot.id} lot={lot} handleSelected={handleSelected}/>)}
     </section>
   )
 }

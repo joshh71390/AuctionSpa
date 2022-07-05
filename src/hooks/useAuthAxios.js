@@ -2,6 +2,7 @@ import { authAxios } from "../apiAccessor/axiosApi";
 import { useEffect } from "react";
 import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
+import { getTokensFromStorage } from "../utility/storage";
 
 const useAuthAxios = () => {
     const { tokens } = useAuth();
@@ -11,7 +12,7 @@ const useAuthAxios = () => {
         const requestInterceptor = authAxios.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${tokens?.accessToken}`;
+                    config.headers['Authorization'] = `Bearer ${getTokensFromStorage().accessToken}`;
                 }
                 return config;
             }, (error) => Promise.reject(error)

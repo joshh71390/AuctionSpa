@@ -1,46 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import useAuth from '../../../hooks/useAuth'
 import './AdminPage.css'
 import LotsList from './LotsList/LotsList'
 import useAuthAxios from '../../../hooks/useAuthAxios'
 import Spinner from '../../shared/Spinner/Spinner'
+import useReviews from '../../../hooks/useReviews'
+import LotDetails from './LotDetails/LotDetails'
 
 const AdminPage = () => {
-  const { stateLoading } = useAuth();
-  const authAxios = useAuthAxios();
+  const getLots = useReviews();
+  const lots = useMemo(() => getLots.data ?? [], [getLots.data]);
 
-  const [lots, setLots] = useState([]);
-  const [selectedLot, setSelectedLot] = useState(lots[0]);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const defaultLot = useMemo(() => lots[0] ?? null, [lots]);
+  const [selectedLot, setSelectedLot] = useState(defaultLot);
 
   const handleSelected = (id) => {
     const selected = lots.find(l => l.id === id);
-    setSelectedLot(selected ?? lots[0]);
+    setSelectedLot(selected ?? defaultLot);
   } 
-
-  useEffect(() => {
-    const getLots = async() => {
-      setLoading(true);
-      try {
-        const response = await authAxios.get('/reviews')
-        .then(response => response.data);
-        setLots(response);
-      } catch {
-        setError('could not fetch data');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getLots();
-  }, [stateLoading])
 
   return (
     <div className='admin-page-container'>
       <LotsList lots={lots} handleSelected={handleSelected}/>
-      
+      <LotDetails lot={selectedLot ?? defaultLot}/>
     </div>
   )
 }

@@ -12,12 +12,10 @@ const useRefreshToken = () => {
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
-        });
+        }).then(response => response.data);
 
-        const newTokens = {
-            accessToken: response.data.accessToken.token,
-            refreshToken: response.data.refreshToken
-        }
+        const { accessToken, refreshToken } = response;
+        const newTokens = { accessToken: accessToken.token, refreshToken: refreshToken };
         changeTokens(newTokens);
         
         return response.data.accessToken.token;
