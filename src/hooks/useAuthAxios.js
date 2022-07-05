@@ -21,7 +21,7 @@ const useAuthAxios = () => {
             response => response,
             async (error) => {
                 const prevRequest = error?.config;
-                if (error?.response?.status === 403 && !prevRequest?.sent) {
+                if (error?.response?.status === 401 && !prevRequest?.sent) {
                     prevRequest.sent = true;
                     const newToken = await refresh();
                     prevRequest.headers['Authorization'] = `Bearer ${newToken}`;

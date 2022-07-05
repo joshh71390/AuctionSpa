@@ -1,17 +1,14 @@
+import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { getUserFromStorage } from "../utility/storage";
 
 const ProtectedRoute = ({ allowedRoles }) => {
-    const { currentUser } = useAuth();
+    const currentUser = getUserFromStorage();
     const location = useLocation();
 
-    return (
-        allowedRoles.includes(currentUser.role) 
-        ? <Outlet/> 
-        : auth?.user 
-            ? <Navigate to="/" state={{ from: location }} replace />
-            : <Navigate to="/" state={{ from: location }} replace />
-    );
+    return allowedRoles.includes(currentUser?.role.toLowerCase()) ?
+    <Outlet/> :
+    <Navigate to={'/auth'} state={{'from': location}} replace/>
 }
 
 export default ProtectedRoute;

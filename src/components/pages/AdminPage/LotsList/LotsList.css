@@ -1,0 +1,56 @@
+.lots-list-container{
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    gap: 1rem;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.admin-lot{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: #d6d1d1;
+    border-left: 0.2rem solid inherit;
+    gap: 0.5rem;
+}
+
+.admin-lot:hover{
+    cursor: pointer;
+    background-color: #9a9393;
+}
+
+.admin-lot-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.admin-lot-status{
+    margin-left: auto;
+    background-color: var(--color-secondary);
+    padding: 0.3rem 0.5rem;
+    color: white;
+    font-family: var(--text-font-secondary);
+    font-size: 0.8rem;
+    width: 8rem;
+    text-align: center;
+}
+
+.lot-name-label{
+    font-family: var(--text-font-secondary);
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.lot-duration-label{
+    font-family: var(--text-font-secondary);
+    font-size: 0.9rem;
+}
+
+.lot-duration{
+    margin-left: 0.3rem;
+    font-weight: 400;
+}

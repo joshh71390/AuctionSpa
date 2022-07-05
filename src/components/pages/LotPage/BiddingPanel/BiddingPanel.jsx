@@ -12,10 +12,7 @@ import successIcon from '../../../../images/success-icon.svg'
 const BiddingPanel = ({lot}) => {
     const { currentUser } = useAuth();
     const authAxios = useAuthAxios();
-
-    const bids = useMemo(() => lot.bids.sort((a,b) => b.price - a.price) ?? [], lot.bids);
-    const highestBid = useMemo(() => bids[0] ?? null, bids);
-
+ 
     const [bidWindowOpen, setBidWindowOpen] = useState(false);
     const [bidAmount, setBidAmount] = useState(0);
     const [bidValid, setBidValid] = useState(false);
@@ -23,6 +20,9 @@ const BiddingPanel = ({lot}) => {
     const [succeed, setSucceed] = useState(false);
     const [error, setError] = useState('');
 
+    const bids = useMemo(() => lot.bids.sort((a,b) => b.price - a.price) ?? [], [lot.bids, succeed]);
+    const highestBid = useMemo(() => bids[0] ?? null, [bids, succeed]);
+    
     useEffect(() => {
         if (error.length !== 0) setError('');
         const allowed = highestBid?.price + lot.minimalBid;
@@ -39,7 +39,7 @@ const BiddingPanel = ({lot}) => {
             
             const bid = {
                 id: response.data, 
-                price: bidAmount,
+                price: parseInt(bidAmount),
                 placedOn: new Date(),
                 bidderId: currentUser.id,
                 bidder: currentUser.name}
@@ -58,7 +58,7 @@ const BiddingPanel = ({lot}) => {
     const getAllowedBidAction = () => {
         const sameBidder = highestBid?.bidderId === currentUser?.id;
         if (sameBidder) return "Your bid is the highest one";
-        const currentTime = moment().toISOString("dd/mm/yyyy HH:mm");
+        const currentTime = moment().utc(true).local().toISOString("dd/mm/yyyy HH:mm");
         const action = lot.openDate > currentTime ? "Auction not started" :
         lot.closeDate > currentTime ? "Place bid" : "Auction is over";
         return action;
@@ -89,10 +89,15 @@ const BiddingPanel = ({lot}) => {
             <span className="bidding-detail">{lot.currentBid}</span>
         </div>
         <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
-            <h3 className="bidding-detail-title">Last bidded on: </h3>
+            {
+                bids.length !== 0 &&
+                <>
+                <h3 className="bidding-detail-title">Last bidded on: </h3>
             <span className="bidding-detail">
                 {highestBid?.placedOn ? moment(highestBid.placedOn).format('LL') : "none"}
             </span>
+                </>
+            }
         </div>
         </div>
     </div>
@@ -113,7 +118,7 @@ const BiddingPanel = ({lot}) => {
     </div>
     <div className="bidders-container">
         <h3 className='bidders-header'>Bids</h3>
-        {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.map(bid => <Bid key={bid.id} bid={bid}/>)}
+        {bids.length === 0 ? <div className="empty-bids">No bids here yet</div> : bids.slice(0,3).map(bid => <Bid key={bid.id} bid={bid}/>)}
     </div>
     <Popup active={bidWindowOpen} setActive={setBidWindowOpen}>
         {

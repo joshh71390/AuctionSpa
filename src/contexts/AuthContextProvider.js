@@ -19,12 +19,14 @@ const AuthProvider = ({ children }) => {
 }
 
 const useAuthState = () => {
+    const [stateLoading, setStateLoading] = useState(true);
     const [currentUser, setUser] = useState(null);
     const [tokens, setTokens] = useState(null);
 
     useEffect(() => {
         if (currentUser === null) {
             setUser(getUserFromStorage);
+            setStateLoading(false);
         }
     }, [currentUser]);
 
@@ -52,6 +54,7 @@ const useAuthState = () => {
     }
 
     return {
+        stateLoading,
         currentUser,
         tokens,
         signIn,

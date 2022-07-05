@@ -10,6 +10,7 @@ const useRefreshToken = () => {
         const response = await axios.post('/auth/refresh',
         JSON.stringify(tokens),
         {
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: true
         });
 
