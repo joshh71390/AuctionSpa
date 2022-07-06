@@ -10,7 +10,7 @@ const useItems = () => {
 
     return useQuery(['filter', search.toString()], 
     async () => await axios.get('lots/sale', {params: search})
-    .then(res => res.data), {
+    .then(res => res.status !== 404 ? res.data : []), {
         staleTime: 120000
     })
 }

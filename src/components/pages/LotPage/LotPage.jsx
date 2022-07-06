@@ -75,7 +75,7 @@ const LotPage = () => {
       </div>
       </div>
       <div className="bidding-details">
-        <BiddingPanel lot={lot}/>
+        {moment(lot.openDate).utc(true).local() <= moment().utc(true).local() && <BiddingPanel lot={lot}/>}
       </div>
     </div>
   )

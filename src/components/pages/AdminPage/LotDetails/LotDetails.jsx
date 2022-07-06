@@ -1,13 +1,16 @@
 import moment from 'moment';
 import React, { useState } from 'react'
 import CountdownContainer from '../../../shared/CountdownContainer/CountdownContainer';
+import Spinner from '../../../shared/Spinner/Spinner';
 import './LotDetails.css'
 
-const LotDetails = ({lot}) => {
+const LotDetails = ({lot, loading}) => {
     const [showDetails, setShowDetails] = useState(false);
     const [showBidding, setShowBidding] = useState(false);
 
   return (
+    loading ? <div className='spinner-container'><Spinner/></div> :
+    lot === null ? <div className='content-empty'>Failed to load lot data</div> :
     <div style={{'display': 'flex', 'flexDirection' : 'column'}}>
     <div className='lot-details-header'>
         <div className="setting-container">

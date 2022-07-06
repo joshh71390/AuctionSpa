@@ -19,7 +19,7 @@
 
 .admin-detail-label{
     font-family: var(--text-font-secondary);
-    max-width: 30rem;
+    max-width: 28rem;
 }
 
 .admin-detail{
@@ -89,4 +89,10 @@
 
 .delete-lot-button:hover{
     cursor: pointer;
+}
+
+@media(max-width: 70rem){
+    .admin-lot-container{
+        grid-template-columns: 1fr;
+    }
 }

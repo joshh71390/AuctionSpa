@@ -20,8 +20,8 @@ const AdminPage = () => {
 
   return (
     <div className='admin-page-container'>
-      <LotsList lots={lots} handleSelected={handleSelected}/>
-      <LotDetails lot={selectedLot ?? defaultLot}/>
+      <LotsList lots={lots} handleSelected={handleSelected} loading={getLots.isLoading}/>
+      <LotDetails lot={selectedLot ?? defaultLot} loading={getLots.isLoading}/>
     </div>
   )
 }

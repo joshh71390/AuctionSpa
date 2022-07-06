@@ -26,7 +26,7 @@ const BiddingPanel = ({lot}) => {
     useEffect(() => {
         if (error.length !== 0) setError('');
         const allowed = highestBid?.price + lot.minimalBid;
-        const bidHigher = bidAmount > allowed && bidAmount < 1000000;
+        const bidHigher = bidAmount > allowed && bidAmount <= 1000000;
         setBidValid(bidHigher);
     }, [bidAmount])
 

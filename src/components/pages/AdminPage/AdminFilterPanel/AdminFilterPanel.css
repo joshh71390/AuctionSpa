@@ -1,0 +1,31 @@
+.admin-filter-panel{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1.5rem;
+}
+
+.admin-name-input{
+    font-family: var(--text-font-secondary);
+    font-size: 1rem;
+    padding: 0.3rem;
+    width: 25rem;
+    border: 0.1rem solid var(--color-secondary);
+}
+
+.admin-filter-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.clear-tag{
+    margin-left: auto;
+    font-family: var(--text-font-secondary);
+    font-size: 0.7rem;
+}
+
+.clear-tag:hover{
+    cursor: pointer;
+    color: var(--color-primary);
+}
