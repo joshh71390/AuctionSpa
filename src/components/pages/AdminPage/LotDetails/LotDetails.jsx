@@ -3,25 +3,81 @@ import React, { useState } from 'react'
 import CountdownContainer from '../../../shared/CountdownContainer/CountdownContainer';
 import Spinner from '../../../shared/Spinner/Spinner';
 import './LotDetails.css'
+import useAuthAxios from '../../../../hooks/useAuthAxios';
+import { useMemo } from 'react';
+import Popup from '../../../shared/Popup/Popup';
+import ApprovePanel from '../ReviewPanels/ApprovePanel';
+import RejectPanel from '../ReviewPanels/RejectPanel';
 
 const LotDetails = ({lot, loading}) => {
+    const axios = useAuthAxios();
+
     const [showDetails, setShowDetails] = useState(false);
     const [showBidding, setShowBidding] = useState(false);
+    const [showApprove, setShowApprove] = useState(false);
+    const [showReject, setShowReject] = useState(false);
+    const [openTimer, setOpenTimer] = useState(false);
+
+    const isAllowed = useMemo(() => lot?.reviewStatus.toLowerCase() === 'allowed', [lot]);
+
+    const [error, setError] = useState('');
+
+    const handleCloseAuction = async() => {
+        
+    }
+
+    const handleStartAution = async() => {
+        try {
+            const response = await axios.put(`/lots/${lot.id}/begin`)
+            .then(response => response.data);
+            
+            if (response.date){
+                lot.openDate = response;
+            }
+        } catch {
+            setError('failed starting auction');
+        }
+    }
 
   return (
     loading ? <div className='spinner-container'><Spinner/></div> :
     lot === null ? <div className='content-empty'>Failed to load lot data</div> :
     <div style={{'display': 'flex', 'flexDirection' : 'column'}}>
     <div className='lot-details-header'>
-        <div className="setting-container">
+        {
+            isAllowed &&
+            <div className="setting-container">
             <div className='admin-countdown'>
             {
                 lot && 
                 <CountdownContainer openDate={lot.openDate} closeDate={lot.closeDate}/>
             }
             </div>
-            <div className="settings-toggle">...</div>
+            {
+                !lot.sold && 
+                <div className="settings-toggle" onClick={() => setOpenTimer(!openTimer)}>...
+                {
+                    openTimer &&
+                    <ul className='dropdown'>
+                        <li 
+                            className='dropdown-item'
+                            style={{'fontSize': '1rem'}}
+                            onClick = {() => handleStartAution()}
+                        >
+                            Start auction
+                        </li>
+                        <li 
+                            className='dropdown-item'
+                            style={{'fontSize': '1rem'}}
+                        >
+                            End auction
+                        </li>
+                    </ul>
+                }
+            </div>
+            }
         </div>
+        }
         <button className="delete-lot-button">Delete</button>
     </div>
     <div className='admin-lot-container'>
@@ -43,11 +99,14 @@ const LotDetails = ({lot, loading}) => {
                 <button className="edit-button">Edit</button>
             </div>
         }
-    <div className="picker-header">
+    {
+        isAllowed ? 
+        <>
+        <div className="picker-header">
         <h4 className="section-label">Bidding</h4>
         <p className='expand-button' onClick={() => setShowBidding(!showBidding)}>{showBidding ? "collapse" : "expand"}</p>
       </div>
-    <hr className="line" />
+        <hr className="line" />
     {
             showBidding && 
             <div className='admin-details-container'>
@@ -58,6 +117,18 @@ const LotDetails = ({lot, loading}) => {
                 <button className="edit-button">Edit</button>
             </div>
         }
+        </>
+        :
+        <div className='review-container'>
+            <p className='review-notion'>This lot requires review to be placed for bidding</p>
+            <div className='review-options-container'>
+                <button className="review-button" onClick={() => setShowApprove(true)}>Approve</button>
+                <button className="review-button" onClick={() => setShowReject(true)}>Reject</button>
+            </div>
+            <Popup active={showApprove} setActive={setShowApprove}><ApprovePanel/></Popup>
+            <Popup active={showReject} setActive={setShowReject}><RejectPanel/></Popup>
+        </div>
+    }
     </div>
     </div>
     </div>

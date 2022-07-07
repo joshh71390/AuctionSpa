@@ -22,13 +22,22 @@ const Header = () => {
           {
             dropdownOpen &&
             <ul className="dropdown">
-              <li className="dropdown-item" style={{'fontSize': '0.8rem'}}>Profile</li>
+              {
+                currentUser.isAdmin ?
+                <Link to={'/admin'} style={{textDecoration: 'none', color: 'white'}}>
+                  <li className="dropdown-item" style={{'fontSize': '0.8rem'}}>Management</li>
+                </Link>
+                :
+                <Link to={'/profile'} style={{textDecoration: 'none', color: 'white'}}>
+                <li className="dropdown-item" style={{'fontSize': '0.8rem'}}>Profile</li>
+                </Link>
+              }
               <li 
                 className="dropdown-item"
                 style={{'fontSize': '0.8rem'}}
                 onClick={signOut}
               >
-                SignOut
+                Sign out
               </li>
             </ul>
           }

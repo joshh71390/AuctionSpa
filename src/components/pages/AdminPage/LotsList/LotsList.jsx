@@ -12,10 +12,15 @@ const Lot = ({lot, handleSelected}) => {
         <section onClick={() => handleSelected(lot.id)} className='admin-lot'>
             <div className="admin-lot-header">
                 <h4 className='lot-name-label'>{lot.name}</h4>
-                <div className='admin-lot-status'>{lot.status.toLowerCase()}</div>
+                <div className='admin-lot-status'>
+                    {
+                        lot.reviewStatus.toLowerCase() === 'allowed' ? 
+                        lot.status.toLowerCase() : lot.reviewStatus.split(/(?=[A-Z])/).join(' ').toLowerCase()
+                    }
+                </div>
             </div>
             {
-                lot.openDate && 
+                lot.reviewStatus.toLowerCase() === 'allowed' && 
                 <h4 className='lot-duration-label'>Auction date:  
                 <span className='lot-duration'>
                     {`${moment(lot.openDate).format('LL')} - ${moment(lot.closeDate).format('LL')}`}
@@ -69,9 +74,11 @@ const LotsList = ({lots, handleSelected, loading}) => {
     <div className='lots-list-container'>
         {
             loading ? <div className='spinner-container'><Spinner/></div> :
+            lots.length === 0 ? <div className='content-empty' style={{'fontSize': '1rem'}}>This section is empty</div> :
             lots.map(lot => <Lot key={lot.id} lot={lot} handleSelected={handleSelected}/>)
         }
     </div>
+    <button className='create-lot-button'>Place lot</button>
     <Popup active={showFilters} setActive={setShowFilters}>
         <AdminFilterPanel/>
     </Popup>

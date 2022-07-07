@@ -61,10 +61,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0.5rem 0 0.5rem 1rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 .settings-toggle{
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,6 +90,32 @@
 
 .delete-lot-button:hover{
     cursor: pointer;
+}
+
+.review-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    border: solid var(--color-secondary);
+}
+
+.review-options-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+}
+
+.review-button{
+    padding: 0.5rem;
+    width: 5rem;
+}
+
+.review-button:hover{
+    cursor: pointer;
+    background-color: #d6d1d1;
 }
 
 @media(max-width: 70rem){
