@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import './LotsList.css'
 import moment from 'moment'
 import { useState } from 'react'
@@ -8,22 +8,24 @@ import AdminFilterPanel from '../AdminFilterPanel/AdminFilterPanel'
 import { useSearchParams } from 'react-router-dom'
 
 const Lot = ({lot, handleSelected}) => {
+    const listLot = useMemo(() => lot ?? {}, [lot, lot?.openDate, lot?.closeDate]);
+
     return (
-        <section onClick={() => handleSelected(lot.id)} className='admin-lot'>
+        <section onClick={() => handleSelected(listLot.id)} className='admin-lot'>
             <div className="admin-lot-header">
-                <h4 className='lot-name-label'>{lot.name}</h4>
+                <h4 className='lot-name-label'>{listLot.name}</h4>
                 <div className='admin-lot-status'>
                     {
-                        lot.reviewStatus.toLowerCase() === 'allowed' ? 
-                        lot.status.toLowerCase() : lot.reviewStatus.split(/(?=[A-Z])/).join(' ').toLowerCase()
+                        listLot.reviewStatus.toLowerCase() === 'allowed' ? 
+                        listLot.status.toLowerCase() : listLot.reviewStatus.split(/(?=[A-Z])/).join(' ').toLowerCase()
                     }
                 </div>
             </div>
             {
-                lot.reviewStatus.toLowerCase() === 'allowed' && 
+                listLot.reviewStatus.toLowerCase() === 'allowed' && 
                 <h4 className='lot-duration-label'>Auction date:  
                 <span className='lot-duration'>
-                    {`${moment(lot.openDate).format('LL')} - ${moment(lot.closeDate).format('LL')}`}
+                    {`${moment(listLot.openDate).format('LL')} - ${moment(listLot.closeDate).format('LL')}`}
                 </span>
             </h4>
             }
@@ -45,8 +47,7 @@ const LotsList = ({lots, handleSelected, loading}) => {
 
     const handleOptionChange = (option) => {
         if (option === options[0].name){
-            search.delete('status');
-            setSearch(search, {
+            setSearch("", {
                 replace: true
             });
         } else {
@@ -71,6 +72,8 @@ const LotsList = ({lots, handleSelected, loading}) => {
         </h4>)}
         <h4 className='admin-filter-toggle admin-filter-option' onClick={() => setShowFilters(true)}>Filters</h4>
     </div>
+    <button className='create-lot-button'>Place lot</button>
+    <div className={lots?.length >= 4 ? 'overflow-scroll' : ''}>
     <div className='lots-list-container'>
         {
             loading ? <div className='spinner-container'><Spinner/></div> :
@@ -78,7 +81,7 @@ const LotsList = ({lots, handleSelected, loading}) => {
             lots.map(lot => <Lot key={lot.id} lot={lot} handleSelected={handleSelected}/>)
         }
     </div>
-    <button className='create-lot-button'>Place lot</button>
+    </div>
     <Popup active={showFilters} setActive={setShowFilters}>
         <AdminFilterPanel/>
     </Popup>

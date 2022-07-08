@@ -118,6 +118,54 @@
     background-color: #d6d1d1;
 }
 
+.time-options-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 20rem;
+}
+
+.time-toggle-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.time-option{
+    display: flex;
+    white-space: nowrap;
+    width: 40%;
+    align-items: center;
+    text-align: center; 
+    padding: 0.5rem 1rem;
+    font-family: var(--text-font-secondary);
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.time-option:disabled{
+    color: gray;
+}
+
+.time-option:enabled:hover{
+    cursor: pointer;
+    background-color: white;
+    color: var(--color-secondary);
+
+}
+
+.time-info{
+    font-size: 0.7rem;
+    background-color: #f0f0f0;
+    color: var(--color-secondary);
+    padding: 0.3rem 1rem;
+    text-align: center;
+}
+
 @media(max-width: 70rem){
     .admin-lot-container{
         grid-template-columns: 1fr;

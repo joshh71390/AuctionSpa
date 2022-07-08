@@ -25,7 +25,7 @@ const BiddingPanel = ({lot}) => {
     
     useEffect(() => {
         if (error.length !== 0) setError('');
-        const allowed = highestBid?.price + lot.minimalBid;
+        const allowed = highestBid?.price ?? 0 + lot.minimalBid;
         const bidHigher = bidAmount > allowed && bidAmount <= 1000000;
         setBidValid(bidHigher);
     }, [bidAmount])
@@ -106,8 +106,9 @@ const BiddingPanel = ({lot}) => {
         <button 
         className="bidding-button" 
         disabled={
-            lot.openDate > moment().toISOString() || lot.closeDate < moment().toISOString()
-            || !currentUser || highestBid.bidderId === currentUser.id ? true : false
+            moment(lot.openDate).local().toISOString() > moment().toISOString() 
+            || moment(lot.closeDate).local().toISOString() < moment().toISOString()
+            || !currentUser || highestBid?.bidderId === currentUser.id ? true : false
         }
         onClick={() => setBidWindowOpen(true)}
         >{getAllowedBidAction()}</button>

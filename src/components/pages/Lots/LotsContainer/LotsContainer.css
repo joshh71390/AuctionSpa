@@ -11,6 +11,7 @@
 
 .content-empty{
     width: 100%;
+    height:auto;
     padding: 6rem;
     text-align: center;
     display: flex;

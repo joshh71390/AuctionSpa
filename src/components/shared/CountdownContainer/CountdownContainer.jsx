@@ -1,9 +1,10 @@
 import React from 'react'
 import { useCounter } from '../../../hooks/useCounter'
 import './CountdownContainer.css'
+import moment from 'moment'
 
 const CountdownContainer = ({openDate, closeDate}) => {
-  const { counter, currentUtcTime } = useCounter({openDate, closeDate});
+  const { counter, currentTime, currentUtcTime } = useCounter({openDate, closeDate});
 
   const Counter = () => {
     return counter ? 
@@ -15,12 +16,13 @@ const CountdownContainer = ({openDate, closeDate}) => {
   }
 
   const CounterContainer = () => {
-    return closeDate > currentUtcTime && openDate < currentUtcTime ?
+    return moment(closeDate).utc(true).local().toISOString("dd/mm/yyyy HH:mm") > currentTime &&
+    moment(openDate).utc(true).local().toISOString("dd/mm/yyyy HH:mm") < currentTime ?
     <div className='timer-container'>
         <div className='timer-title'>Remaining time:&nbsp;</div>
         <div><Counter/></div>
     </div>
-    : openDate > currentUtcTime ?
+    : moment(openDate).utc(true).local().toISOString("dd/mm/yyyy HH:mm") > currentTime ?
     <div className='timer-container'>
         <div className='timer-title'>Time until start:&nbsp;</div>
         <div><Counter/></div>

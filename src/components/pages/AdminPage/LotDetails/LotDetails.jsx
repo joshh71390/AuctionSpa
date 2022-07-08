@@ -1,42 +1,64 @@
 import moment from 'moment';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CountdownContainer from '../../../shared/CountdownContainer/CountdownContainer';
 import Spinner from '../../../shared/Spinner/Spinner';
 import './LotDetails.css'
 import useAuthAxios from '../../../../hooks/useAuthAxios';
+import axios from '../../../../apiAccessor/axiosApi';
 import { useMemo } from 'react';
 import Popup from '../../../shared/Popup/Popup';
 import ApprovePanel from '../ReviewPanels/ApprovePanel';
 import RejectPanel from '../ReviewPanels/RejectPanel';
+import EditDetailsPanel from '../EditDetailsPanel/EditDetailsPanel';
 
 const LotDetails = ({lot, loading}) => {
-    const axios = useAuthAxios();
+    const authAxios = useAuthAxios();
 
     const [showDetails, setShowDetails] = useState(false);
     const [showBidding, setShowBidding] = useState(false);
     const [showApprove, setShowApprove] = useState(false);
     const [showReject, setShowReject] = useState(false);
     const [openTimer, setOpenTimer] = useState(false);
+    const [showEditDetails, setShowEditDetails] = useState(false);
+    const [showEditBidding, setShowEditBidding] = useState(false);
 
-    const isAllowed = useMemo(() => lot?.reviewStatus.toLowerCase() === 'allowed', [lot]);
+    const [statuses, setStatuses] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    const isAllowed = useMemo(() => lot?.reviewStatus.toLowerCase() === 'allowed', [lot?.reviewStatus]);
 
     const [error, setError] = useState('');
 
-    const handleCloseAuction = async() => {
+    useEffect(() => {
+        const getStatuses = async() => {
+            const response = await authAxios.get('/lots/statuses')
+            .then(response => response.data);
+            setStatuses(response);
+        }
         
+        getStatuses();
+    }, [])
+
+    useEffect(() => {
+        const getCategories = async() => {
+            const response = await axios.get('/lots/categories')
+            .then(response => response.data);
+            setCategories(response);
+        }
+
+        getCategories();
+    }, [])
+
+    const handleCloseAuction = async() => {
+        await authAxios.put(`/lots/${lot.id}/close`)
+            .then(response => lot.closeDate = moment(response.data).local().toISOString())
+            .catch(() => setError('failed closing auction'));   
     }
 
     const handleStartAution = async() => {
-        try {
-            const response = await axios.put(`/lots/${lot.id}/begin`)
-            .then(response => response.data);
-            
-            if (response.date){
-                lot.openDate = response;
-            }
-        } catch {
-            setError('failed starting auction');
-        }
+        await authAxios.put(`/lots/${lot.id}/begin`)
+            .then(response => lot.openDate = moment(response.data).local().toISOString())
+            .catch(() => setError('failed starting auction'));
     }
 
   return (
@@ -58,21 +80,35 @@ const LotDetails = ({lot, loading}) => {
                 <div className="settings-toggle" onClick={() => setOpenTimer(!openTimer)}>...
                 {
                     openTimer &&
-                    <ul className='dropdown'>
-                        <li 
-                            className='dropdown-item'
+                    <div className='dropdown'>
+                        <div className="time-options-container">
+                        <p className='time-info'>You can start or end auction depending on its current date set. You can`t restart the auction if it is sold.</p>
+                        <div className="time-toggle-container">
+                        <button 
+                            className='time-option'
                             style={{'fontSize': '1rem'}}
                             onClick = {() => handleStartAution()}
+                            disabled={
+                                moment(lot.openDate).utc(true).local() < moment().utc(true).local() 
+                                || lot.sold ? true : false}
                         >
-                            Start auction
-                        </li>
-                        <li 
-                            className='dropdown-item'
+                            start auction
+                        </button>
+                        <button 
+                            className='time-option'
                             style={{'fontSize': '1rem'}}
+                            onClick={() => handleCloseAuction()}
+                            disabled={
+                                moment(lot.closeDate).utc(true).local() < moment().utc(true).local()
+                                || moment(lot.openDate).utc(true).local() > moment().utc(true).local()
+                                || lot.sold ? true : false
+                            }
                         >
-                            End auction
-                        </li>
-                    </ul>
+                            end auction
+                        </button>
+                        </div>
+                        </div>
+                    </div>
                 }
             </div>
             }
@@ -96,7 +132,10 @@ const LotDetails = ({lot, loading}) => {
                 <h4 className='admin-detail-label'>Category: <span className='admin-detail'>{lot.category}</span></h4>
                 <h4 className='admin-detail-label'>Start price: <span className='admin-detail'>{lot.startPrice}</span></h4>
                 <h4 className='admin-detail-label'>Description: <span className='admin-detail'>{lot.description}</span></h4>
-                <button className="edit-button">Edit</button>
+                <button className="edit-button" onClick={() => setShowEditDetails(true)}>Edit</button>
+                <Popup active={showEditDetails} setActive={setShowEditDetails}>
+                    <EditDetailsPanel/>
+                </Popup>
             </div>
         }
     {
@@ -125,7 +164,12 @@ const LotDetails = ({lot, loading}) => {
                 <button className="review-button" onClick={() => setShowApprove(true)}>Approve</button>
                 <button className="review-button" onClick={() => setShowReject(true)}>Reject</button>
             </div>
-            <Popup active={showApprove} setActive={setShowApprove}><ApprovePanel/></Popup>
+            <Popup active={showApprove} setActive={setShowApprove}>
+                <ApprovePanel 
+                    lot={lot}
+                    startPrice={lot.startPrice} 
+                    statuses={statuses}/>
+                </Popup>
             <Popup active={showReject} setActive={setShowReject}><RejectPanel/></Popup>
         </div>
     }

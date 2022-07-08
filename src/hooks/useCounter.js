@@ -8,10 +8,12 @@ export function useCounter({openDate, closeDate}) {
   
     useEffect(() => {
       let duration;
-      if (openDate > currentTime) {
+      const openDateFormat = moment(openDate).utc(true).local().toISOString("dd/mm/yyyy HH:mm");
+      const closeDateFormat = moment(closeDate).utc(true).local().toISOString("dd/mm/yyyy HH:mm");
+      if (openDateFormat > currentTime) {
         let eventTime = moment(openDate).utc(true).local();
         duration = moment.duration(eventTime.diff(currentTime));
-      } else if (openDate < currentTime && closeDate > currentTime) {
+      } else if (openDateFormat < currentTime && closeDateFormat > currentTime) {
         let eventTime = moment(closeDate).utc(true).local();
         duration = moment.duration(eventTime.diff(currentTime));
       }
@@ -38,10 +40,11 @@ export function useCounter({openDate, closeDate}) {
         clearInterval(timer);
         clearTimeout(timeout);
       };
-    }, [counter, currentTime]);
+    }, [counter, currentTime, openDate, closeDate]);
   
     return {
       counter,
+      currentTime,
       currentUtcTime,
     };
   }
