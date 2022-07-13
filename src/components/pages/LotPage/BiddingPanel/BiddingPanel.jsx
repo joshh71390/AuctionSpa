@@ -25,7 +25,7 @@ const BiddingPanel = ({lot}) => {
     
     useEffect(() => {
         if (error.length !== 0) setError('');
-        const allowed = highestBid?.price ?? 0 + lot.minimalBid;
+        const allowed = highestBid ? highestBid.price + lot.minimalBid : 0 + lot.minimalBid;
         const bidHigher = bidAmount > allowed && bidAmount <= 1000000;
         setBidValid(bidHigher);
     }, [bidAmount])
@@ -40,7 +40,7 @@ const BiddingPanel = ({lot}) => {
             const bid = {
                 id: response.data, 
                 price: parseInt(bidAmount),
-                placedOn: new Date(),
+                placedOn: moment().utc(),
                 bidderId: currentUser.id,
                 bidder: currentUser.name}
             
@@ -88,17 +88,15 @@ const BiddingPanel = ({lot}) => {
             <h3 className="bidding-detail-title">Current bid amount: </h3>
             <span className="bidding-detail">{lot.currentBid}</span>
         </div>
-        <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
-            {
-                bids.length !== 0 &&
-                <>
+        {
+            bids.length !== 0 &&
+            <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
                 <h3 className="bidding-detail-title">Last bidded on: </h3>
-            <span className="bidding-detail">
-                {highestBid?.placedOn ? moment(highestBid.placedOn).format('LL') : "none"}
-            </span>
-                </>
-            }
-        </div>
+                <span className="bidding-detail">
+                    {highestBid?.placedOn ? moment(highestBid.placedOn).format('LL') : "none"}
+                </span>
+            </div>
+        }
         </div>
     </div>
     {

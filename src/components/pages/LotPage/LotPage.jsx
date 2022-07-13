@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import './LotPage.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from '../../../apiAccessor/axiosApi'
@@ -12,6 +12,9 @@ const LotPage = () => {
   const [lot, setLot] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  const bids = useMemo(() => lot?.bids?.sort((a,b) => b.price - a.price) ?? [], [lot.bids]);
+  const highestBid = useMemo(() => bids[0] ?? null, [bids]);
 
   useEffect(() => {
     getLot();
@@ -51,6 +54,24 @@ const LotPage = () => {
         <div className="status-container">
           <h1 className='status'>{lot.status}</h1>
         </div>
+        {
+          lot?.sold &&
+          <div>
+              <div 
+                className="buyer-container" 
+                style={{
+                  'marginBottom': '1rem',
+                  'fontFamily': 'var(--text-font-primary)',
+                  'color': 'var(--color-secondary)'}}>
+                  <h2 className="price-title">Sold to:</h2>
+                  <h2 className="bidder">{highestBid?.bidder}</h2>
+                  <div className="bid-price">
+                      <h2 className="price-title">Final price:</h2>
+                      <h2 className='price-value'>{lot?.startPrice + highestBid?.price}</h2>
+                  </div>
+              </div>
+          </div>
+        }
         <div className="description">
             <h1 className="description-title">Auction duration:
             <span className="description-text">{`${moment(lot.openDate).format('LL')} - ${moment(lot.closeDate).format('LL')}`}</span>

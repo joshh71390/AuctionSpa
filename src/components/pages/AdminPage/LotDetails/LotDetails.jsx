@@ -4,14 +4,15 @@ import CountdownContainer from '../../../shared/CountdownContainer/CountdownCont
 import Spinner from '../../../shared/Spinner/Spinner';
 import './LotDetails.css'
 import useAuthAxios from '../../../../hooks/useAuthAxios';
-import axios from '../../../../apiAccessor/axiosApi';
 import { useMemo } from 'react';
 import Popup from '../../../shared/Popup/Popup';
 import ApprovePanel from '../ReviewPanels/ApprovePanel';
 import RejectPanel from '../ReviewPanels/RejectPanel';
 import EditDetailsPanel from '../EditDetailsPanel/EditDetailsPanel';
+import EditBiddingPanel from '../EditBiddingPanel/EditBiddingPanel';
+import { useMutation, useQueryClient } from 'react-query';
 
-const LotDetails = ({lot, loading}) => {
+const LotDetails = ({lot, statuses, categories, handleDelete, loading}) => {
     const authAxios = useAuthAxios();
 
     const [showDetails, setShowDetails] = useState(false);
@@ -19,46 +20,59 @@ const LotDetails = ({lot, loading}) => {
     const [showApprove, setShowApprove] = useState(false);
     const [showReject, setShowReject] = useState(false);
     const [openTimer, setOpenTimer] = useState(false);
+    const [openDeletewindow, setOpenDeleteWindow] = useState(false);
+    const [openStatuses, setOpenStatuses] = useState(false);
     const [showEditDetails, setShowEditDetails] = useState(false);
     const [showEditBidding, setShowEditBidding] = useState(false);
 
-    const [statuses, setStatuses] = useState([]);
-    const [categories, setCategories] = useState([]);
+    const currentStatus = useMemo(() => statuses?.find(s => s.name === lot?.status) ?? {name: 'loading...'}, [lot?.status]);
 
     const isAllowed = useMemo(() => lot?.reviewStatus.toLowerCase() === 'allowed', [lot?.reviewStatus]);
+    
+    const bids = useMemo(() => lot !== null ? lot?.bids?.sort((a,b) => b.price - a.price) : [], [lot?.bids, loading]);
+    const highestBid = useMemo(() => bids[0] ?? null, [bids, loading]);
 
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        const getStatuses = async() => {
-            const response = await authAxios.get('/lots/statuses')
-            .then(response => response.data);
-            setStatuses(response);
-        }
-        
-        getStatuses();
-    }, [])
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const getCategories = async() => {
-            const response = await axios.get('/lots/categories')
-            .then(response => response.data);
-            setCategories(response);
-        }
-
-        getCategories();
-    }, [])
-
-    const handleCloseAuction = async() => {
+    const handleCloseAuction = useMutation(async() => {
         await authAxios.put(`/lots/${lot.id}/close`)
             .then(response => lot.closeDate = moment(response.data).local().toISOString())
             .catch(() => setError('failed closing auction'));   
-    }
+    }, {
+        onSuccess: () => queryClient.invalidateQueries(['reviews'])
+    })
 
-    const handleStartAution = async() => {
+    const handleStartAution = useMutation(async() => {
         await authAxios.put(`/lots/${lot.id}/begin`)
             .then(response => lot.openDate = moment(response.data).local().toISOString())
             .catch(() => setError('failed starting auction'));
+    }, {
+        onSuccess: () => queryClient.invalidateQueries(['reviews'])
+    })
+
+    const handleStatusChange = useMutation(async id => {
+        if (id !== currentStatus.id){
+            await authAxios.put(`lots/${lot.id}/status/${id}`)
+            .then(() => {
+                lot.status = statuses.find(s => s.id === id).name;
+            });
+        }
+    }, {
+        onSuccess: () => queryClient.invalidateQueries(['reviews'])
+    })
+
+    const [confirming, setConfirming] = useState(false);
+
+    const handlePurchase = async() => {
+        setConfirming(true);
+        await authAxios.put(`/bidding/${lot.id}/sold/${highestBid.bidderId}`)
+            .then(() => {
+                lot.sold = true;
+                lot.buyer = highestBid.bidder;
+                setConfirming(false);
+            });
     }
 
   return (
@@ -87,7 +101,7 @@ const LotDetails = ({lot, loading}) => {
                         <button 
                             className='time-option'
                             style={{'fontSize': '1rem'}}
-                            onClick = {() => handleStartAution()}
+                            onClick = {() => handleStartAution.mutate()}
                             disabled={
                                 moment(lot.openDate).utc(true).local() < moment().utc(true).local() 
                                 || lot.sold ? true : false}
@@ -97,7 +111,7 @@ const LotDetails = ({lot, loading}) => {
                         <button 
                             className='time-option'
                             style={{'fontSize': '1rem'}}
-                            onClick={() => handleCloseAuction()}
+                            onClick={() => handleCloseAuction.mutate()}
                             disabled={
                                 moment(lot.closeDate).utc(true).local() < moment().utc(true).local()
                                 || moment(lot.openDate).utc(true).local() > moment().utc(true).local()
@@ -114,12 +128,62 @@ const LotDetails = ({lot, loading}) => {
             }
         </div>
         }
-        <button className="delete-lot-button">Delete</button>
+        {
+            isAllowed &&
+            <div className='admin-status-toggle' onClick={() => setOpenStatuses(!openStatuses)}>
+            Status: <span className='selected-filter' style={{'fontWeight': '400', 'fontSize' : '1rem'}}>{currentStatus?.name}</span>
+            {openStatuses &&
+              <ul className='dropdown'>
+                {statuses?.map((option, idx) => 
+                  <li key={idx} className='dropdown-item' onClick={() => handleStatusChange.mutate(option.id)}>
+                  {option.name}
+                  </li>
+                )}
+              </ul>
+            }
+        </div>
+        }
+        <button className="delete-lot-button" onClick={() => setOpenDeleteWindow(true)}>Delete</button>
+        <Popup active={openDeletewindow} setActive={setOpenDeleteWindow}>
+        <div className='review-container' style={{'border': 'none'}}>
+            <p className='review-notion'>Are you sure you want to delete this lot?</p>
+            <div className='review-options-container'>
+                <button 
+                    className="review-button" 
+                    onClick={() => {
+                        handleDelete(lot.id);
+                        setOpenDeleteWindow(false);
+                    }}>
+                        Yes</button>
+                <button className="review-button" onClick={() => setOpenDeleteWindow(false)}>No</button>
+            </div>
+        </div>
+        </Popup>
     </div>
     <div className='admin-lot-container'>
-    {lot && <img className='lot-image' src={`${process.env.REACT_APP_AUCTION_API_URL}/images/lot/${lot.id}/large`} alt="lot-img" style={{'width':'30rem'}}/>}
+    {
+        lot && 
+        <img
+            key={lot?.id} 
+            className='lot-image' 
+            src={`${process.env.REACT_APP_AUCTION_API_URL}/images/lot/${lot.id}/large`} 
+            alt="lot-img" 
+            style={{'width':'30rem'}}/>}
     <div className="details-container">
-    <div className="picker-header">
+    {
+        lot?.reviewStatus.toLowerCase() === 'rejected' ?
+        <div>
+            <div className="buyer-container" style={{'flexDirection': 'column', 'alignItems': 'start', 'gap': '1rem'}}>
+                <h2 className="bidder" style={{'alignSelf': 'center'}}>Rejected</h2>
+                <div>
+                    <h2 className='bidder'>Reason:</h2>
+                    <h2 className="price-title">{lot?.feedback}</h2>
+                </div>
+            </div>
+        </div>
+        :
+        <>
+        <div className="picker-header">
         <h4 className="section-label">Details</h4>
         <p className='expand-button' onClick={() => setShowDetails(!showDetails)}>{showDetails ? "collapse" : "expand"}</p>
       </div>
@@ -134,26 +198,41 @@ const LotDetails = ({lot, loading}) => {
                 <h4 className='admin-detail-label'>Description: <span className='admin-detail'>{lot.description}</span></h4>
                 <button className="edit-button" onClick={() => setShowEditDetails(true)}>Edit</button>
                 <Popup active={showEditDetails} setActive={setShowEditDetails}>
-                    <EditDetailsPanel/>
+                    <EditDetailsPanel lot={lot} categories={categories} active={showEditDetails}/>
                 </Popup>
             </div>
         }
     {
-        isAllowed ? 
+        isAllowed ?
+        lot?.sold ?
+        <div>
+            <div className="buyer-container">
+                <h2 className="price-title">Sold to:</h2>
+                <h2 className="bidder">{highestBid?.bidder}</h2>
+                <div className="bid-price">
+                    <h2 className="price-title">Final price:</h2>
+                    <h2 className='price-value'>{lot?.startPrice + highestBid?.price}</h2>
+                </div>
+            </div>
+        </div> 
+        :
         <>
         <div className="picker-header">
         <h4 className="section-label">Bidding</h4>
         <p className='expand-button' onClick={() => setShowBidding(!showBidding)}>{showBidding ? "collapse" : "expand"}</p>
       </div>
         <hr className="line" />
-    {
+        {
             showBidding && 
             <div className='admin-details-container'>
-                <h4 className='admin-detail-label'>Start date: <span className='admin-detail'>{moment(lot.openDate).utc(true).local().format('LLL')}</span></h4>
-                <h4 className='admin-detail-label'>End date: <span className='admin-detail'>{moment(lot.closeDate).utc(true).local().format('LLL')}</span></h4>
+                <h4 className='admin-detail-label'>Start date: <span className='admin-detail'>{moment(lot.openDate).local().format('LLL')}</span></h4>
+                <h4 className='admin-detail-label'>End date: <span className='admin-detail'>{moment(lot.closeDate).local().format('LLL')}</span></h4>
                 <h4 className='admin-detail-label'>Minimal bid: <span className='admin-detail'>{lot.minimalBid}</span></h4>
                 <h4 className='admin-detail-label'>Current bid: <span className='admin-detail'>{lot.currentBid}</span></h4>
-                <button className="edit-button">Edit</button>
+                <button className="edit-button" onClick={() => setShowEditBidding(true)}>Edit</button>
+                <Popup active={showEditBidding} setActive={setShowEditBidding}>
+                    <EditBiddingPanel lot={lot} active={showEditBidding}/>
+                </Popup>
             </div>
         }
         </>
@@ -170,8 +249,28 @@ const LotDetails = ({lot, loading}) => {
                     startPrice={lot.startPrice} 
                     statuses={statuses}/>
                 </Popup>
-            <Popup active={showReject} setActive={setShowReject}><RejectPanel/></Popup>
+            <Popup active={showReject} setActive={setShowReject}>
+                <RejectPanel lot={lot}/>
+            </Popup>
         </div>
+    }
+    {
+        confirming ? <div className='spinner-container' style={{'height': 'auto', 'padding': '0'}}><Spinner/></div> :
+        (moment(lot?.closeDate).local() < moment().local() && lot?.bids.length > 0 && !lot?.sold) &&
+        <div className='lot-sold-container'>
+            <p className="bid-auth-warning" style={{'width': '100%', 'padding' : '1rem', 'fontSize': '0.8rem'}}>This lot requires review since bids are closed and it has a potential buyer</p>
+            <div className="buyer-container">
+                <h2 className="price-title">Buyer:</h2>
+                <h2 className="bidder">{highestBid?.bidder}</h2>
+                <div className="bid-price">
+                    <h2 className="price-title">Final price:</h2>
+                    <h2 className='price-value'>{lot?.startPrice + highestBid?.price}</h2>
+                </div>
+            </div>
+            <button className="edit-button" onClick={() => handlePurchase()}>Approve purchase</button>
+        </div>
+    }
+    </>
     }
     </div>
     </div>

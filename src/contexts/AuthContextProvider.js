@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { 
     getUserFromStorage,
     removeUserFromStorage, 
@@ -23,6 +24,8 @@ const useAuthState = () => {
     const [currentUser, setUser] = useState(null);
     const [tokens, setTokens] = useState(null);
 
+    const client = useQueryClient();
+
     useEffect(() => {
         if (currentUser === null) {
             setUser(getUserFromStorage);
@@ -36,17 +39,25 @@ const useAuthState = () => {
         }
     }, [tokens])
 
-    const signIn = (data) => {
+    const signInMutation = useMutation((data) => {
         const {userData, tokensData} = setUserInStorage(data);
         setUser(userData);
         setTokens(tokensData);
-    }
+    }, {
+        onSuccess: () => client.invalidateQueries(['owned', 'participated'])
+    })
+
+    const signIn = (data) => signInMutation.mutate(data);
     
-    const signOut = () => {
+    const signOutMutation = useMutation(() => {
         removeUserFromStorage();
         setUser(null);
         setTokens(null);
-    }
+    }, {
+        onSuccess: () => client.invalidateQueries(['owned', 'participated'])
+    })
+
+    const signOut = () => signOutMutation.mutate();
 
     const changeTokens = (newTokens) => {
         changeStoredTokens(newTokens);

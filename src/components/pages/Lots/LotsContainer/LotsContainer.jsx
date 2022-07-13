@@ -18,7 +18,7 @@ const LotsContainer = ({lots, isLoading}) => {
         lots.length === 0 ? "spinner-container" : "lots-display-container"}>
         {isLoading ? <Spinner/> : lots.length === 0 ? 
             <div className="content-empty">
-            Ooops... guess nothing is in here yet
+            Nothing is in here yet
             </div>
           : lots.map(lot => <LotCard key={lot.id} lot={lot}/>
          )}

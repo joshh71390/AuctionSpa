@@ -7,6 +7,7 @@ const CountdownContainer = ({openDate, closeDate}) => {
   const { counter, currentTime, currentUtcTime } = useCounter({openDate, closeDate});
 
   const Counter = () => {
+    if (isNaN(counter)) return <p>loading...</p>
     return counter ? 
     <p className='countdown-timer'>
         {counter.days().toFixed()}d {counter.hours()}h {counter.minutes()}m{" "} {counter.seconds()}s

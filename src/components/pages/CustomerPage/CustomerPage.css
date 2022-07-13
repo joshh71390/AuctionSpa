@@ -1,0 +1,75 @@
+.customer-page{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.customer-control-panel{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lot-create-button{
+    font-family: var(--text-font-primary);
+    font-weight: 400;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    background-color: white;
+    border: solid var(--color-secondary);
+    
+}
+
+.lot-create-button:hover{
+    cursor: pointer;
+    color: var(--color-primary);
+    border: solid var(--color-primary);
+}
+
+.scroll-lots-list{
+    padding: 1rem;
+    display: grid;
+    gap: 2rem;
+    grid-auto-flow: column;
+    grid-auto-columns: 28%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.lot-manage-container{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.pending{
+    grid-template-columns: 1fr;
+}
+
+.edit-lot-button{
+    font-family: var(--text-font-primary);
+    font-size: 1rem;
+    border: solid var(--color-secondary);
+    background-color: white;
+}
+
+.edit-lot-button:hover{
+    cursor: pointer;
+    color: var(--color-primary);
+    border: solid var(--color-primary);
+}
+
+.lot-edit-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media(max-width: 70rem){
+    .scroll-lots-list{
+        grid-auto-columns: 45%;
+    }
+}

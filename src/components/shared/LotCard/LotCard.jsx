@@ -16,7 +16,7 @@ const LotCard = ({lot}) => {
         <p>Close date: <span className="info-value">{moment(lot.closeDate).format('LL')}</span></p>
         </div>
       </div>
-      <Link to={`${lot.id}`}>
+      <Link to={`../lots/${lot.id}`}>
         <button className="bid-button">
           Go to bid
         </button>

@@ -8,9 +8,9 @@ const useItems = () => {
         sortBy: 'dateDesc'
     });
 
-    return useQuery(['filter', search.toString()], 
+    return useQuery(["filter", search.toString()], 
     async () => await axios.get('lots/sale', {params: search})
-    .then(res => res.status !== 404 ? res.data : []), {
+    .then(res => res.data), {
         staleTime: 120000
     })
 }

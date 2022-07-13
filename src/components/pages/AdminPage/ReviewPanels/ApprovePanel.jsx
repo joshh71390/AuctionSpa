@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query';
 import useAuthAxios from '../../../../hooks/useAuthAxios';
 import Spinner from '../../../shared/Spinner/Spinner';
 import './ReviewPanels.css'
@@ -45,17 +46,9 @@ const ApprovePanel = ({lot, startPrice, statuses}) => {
     setMinimalBidValid(minimalBid <= halfPrice && minimalBid >= 0);
   }, [minimalBid])
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setProcessing(true);
 
-    const approval = {
-      statusId: selectedStatus.id,
-      minimalBid: new Number(minimalBid),
-      openDate: openDate,
-      closeDate: closeDate
-    };
-
+  const queryClient = useQueryClient();
+  const mutation = useMutation(async approval => {
     await axios.put(`/reviews/${lot.id}/approve`, JSON.stringify(approval))
     .then(() => {
       lot.reviewStatus = 'Allowed';
@@ -73,6 +66,22 @@ const ApprovePanel = ({lot, startPrice, statuses}) => {
       setSelectedStatuts({});
       setProcessing(false);
     });
+  }, {
+    onSuccess: () => queryClient.invalidateQueries(['reviews'])
+  })
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setProcessing(true);
+
+    const approval = {
+      statusId: selectedStatus.id,
+      minimalBid: new Number(minimalBid),
+      openDate: openDate,
+      closeDate: closeDate
+    };
+
+    await mutation.mutateAsync(approval);
   }
 
   return (

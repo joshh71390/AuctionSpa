@@ -6,6 +6,7 @@ import Spinner from '../../../shared/Spinner/Spinner'
 import Popup from '../../../shared/Popup/Popup'
 import AdminFilterPanel from '../AdminFilterPanel/AdminFilterPanel'
 import { useSearchParams } from 'react-router-dom'
+import AdminCreateLotForm from '../AdminCreateLotForm/AdminCreateLotForm'
 
 const Lot = ({lot, handleSelected}) => {
     const listLot = useMemo(() => lot ?? {}, [lot, lot?.openDate, lot?.closeDate]);
@@ -39,11 +40,12 @@ const options = [
     {name: 'Complete', selected: false}
 ];
 
-const LotsList = ({lots, handleSelected, loading}) => {
+const LotsList = ({lots, statuses, categories, handleSelected, loading, status}) => {
     const [search, setSearch] = useSearchParams();
 
     const [selectedOption, setSelectedOption] = useState(options[0].name);
     const [showFilters, setShowFilters] = useState(false);
+    const [showCreateLot, setShowCreateLot] = useState(false);
 
     const handleOptionChange = (option) => {
         if (option === options[0].name){
@@ -72,12 +74,19 @@ const LotsList = ({lots, handleSelected, loading}) => {
         </h4>)}
         <h4 className='admin-filter-toggle admin-filter-option' onClick={() => setShowFilters(true)}>Filters</h4>
     </div>
-    <button className='create-lot-button'>Place lot</button>
-    <div className={lots?.length >= 4 ? 'overflow-scroll' : ''}>
+    <button className='create-lot-button' onClick={() => setShowCreateLot(true)}>Place lot</button>
+    <Popup active={showCreateLot} setActive={setShowCreateLot}>
+        <AdminCreateLotForm
+            statuses={statuses}
+            categories={categories}
+            active={showCreateLot}
+        />
+    </Popup>
+    <div className='overflow-scroll'>
     <div className='lots-list-container'>
         {
             loading ? <div className='spinner-container'><Spinner/></div> :
-            lots.length === 0 ? <div className='content-empty' style={{'fontSize': '1rem'}}>This section is empty</div> :
+            lots.length === 0 || status === 'error' ? <div className='content-empty' style={{'fontSize': '1rem'}}>This section is empty</div> :
             lots.map(lot => <Lot key={lot.id} lot={lot} handleSelected={handleSelected}/>)
         }
     </div>

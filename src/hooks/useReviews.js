@@ -6,7 +6,7 @@ const useReviews = () => {
     const authAxios = useAuthAxios();
     const [search] = useSearchParams({});
 
-    return useQuery(["lot", search.toString()],
+    return useQuery(["reviews", search.toString()],
     async() => await authAxios.get('/reviews', {params: search})
     .then(response => response.data), 
     {
