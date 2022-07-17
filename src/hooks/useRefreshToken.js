@@ -3,7 +3,7 @@ import useAuth from "./useAuth";
 import { getTokensFromStorage } from '../utility/storage';
 
 const useRefreshToken = () => {
-    const { changeTokens } = useAuth();
+    const { changeTokens, signOut } = useAuth();
 
     const refresh = async () => {
         const tokens = getTokensFromStorage();
@@ -12,7 +12,9 @@ const useRefreshToken = () => {
         {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true
-        }).then(response => response.data);
+        })
+        .then(response => response.data)
+        .catch(() => signOut());
 
         const { accessToken, refreshToken } = response;
         const newTokens = { accessToken: accessToken.token, refreshToken: refreshToken };

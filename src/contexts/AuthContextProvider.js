@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { 
     getUserFromStorage,
     removeUserFromStorage, 
@@ -25,6 +26,7 @@ const useAuthState = () => {
     const [tokens, setTokens] = useState(null);
 
     const client = useQueryClient();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (currentUser === null) {
@@ -57,7 +59,10 @@ const useAuthState = () => {
         onSuccess: () => client.invalidateQueries(['owned', 'participated'])
     })
 
-    const signOut = () => signOutMutation.mutate();
+    const signOut = () => {
+        signOutMutation.mutate();
+        navigate('../auth');
+    }
 
     const changeTokens = (newTokens) => {
         changeStoredTokens(newTokens);

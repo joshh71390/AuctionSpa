@@ -65,7 +65,7 @@ const BiddingPanel = ({lot}) => {
     }
 
   return (
-    <>
+    <section className='bidding-section'>
     <div className="lot-bidding-panel">
     <div className="bidding-status-container">
         <div className="bidding-status-header">
@@ -90,7 +90,7 @@ const BiddingPanel = ({lot}) => {
         </div>
         {
             bids.length !== 0 &&
-            <div className="bidding-detail-container" style={{'marginLeft': 'auto'}}>
+            <div className="bidding-detail-container">
                 <h3 className="bidding-detail-title">Last bidded on: </h3>
                 <span className="bidding-detail">
                     {highestBid?.placedOn ? moment(highestBid.placedOn).format('LL') : "none"}
@@ -161,7 +161,7 @@ const BiddingPanel = ({lot}) => {
         </div>
         }
     </Popup>
-    </>
+    </section>
   )
 }
 

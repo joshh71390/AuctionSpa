@@ -8,7 +8,6 @@ import moment from 'moment'
 import useAuth from '../../../hooks/useAuth'
 import Popup from '../../shared/Popup/Popup'
 import { useState } from 'react'
-import EditDetailsPanel from '../AdminPage/EditDetailsPanel/EditDetailsPanel'
 import Spinner from '../../shared/Spinner/Spinner'
 import CustomerCreateLotForm from './CustomerCreateLotForm/CustomerCreateLotForm'
 import ReapplyForm from './ReapplyForm/ReapplyForm'
@@ -18,7 +17,6 @@ const OwnedLot = ({lot, categories}) => {
     const pending = useMemo(() => lot.reviewStatus.toLowerCase() === 'pendingreview', [lot]);
     const rejected = useMemo(() => lot.reviewStatus.toLowerCase() === 'rejected', [lot]);
     
-
     return (
         <div className='lot-card'>
           <img className='lot-image' alt='' src={`${process.env.REACT_APP_AUCTION_API_URL}/images/lot/${lot.id}/thumbnail`}/>

@@ -24,7 +24,6 @@ const ReapplyForm = ({lot, categories, active}) => {
     const defaultImage = `${process.env.REACT_APP_AUCTION_API_URL}/images/lot/${lot.id}/thumbnail`;
     const [previewImage, setPreviewImage] = useState(defaultImage);
 
-
     const [processing, setProcessing] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
@@ -202,19 +201,12 @@ const ReapplyForm = ({lot, categories, active}) => {
               <p className="bid-auth-warning" style={{'width': '100%', 'padding' : '1rem'}}>Cannot change the price because auction for this lot already started</p>
             }
           </div>
-          <div className="lot-edit-container">
           <button 
               className="auth-submit-button"
               disabled={!nameValid || !descriptionValid || !startPriceValid ? true : false}
           >
               Submit
           </button>
-          <button 
-            className="auth-submit-button"
-            style={{'backgroundColor': '#CC5C5C', 'color': 'white'}}>
-              Remove
-          </button>
-          </div>
       </div>
       </form>
     )

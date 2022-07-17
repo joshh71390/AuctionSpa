@@ -73,3 +73,9 @@
         grid-auto-columns: 45%;
     }
 }
+
+@media(max-width: 50rem){
+    .scroll-lots-list{
+        grid-auto-columns: 100%;
+    }
+}

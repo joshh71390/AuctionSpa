@@ -6,30 +6,31 @@ import CountdownContainer from '../../shared/CountdownContainer/CountdownContain
 import moment from 'moment'
 import BiddingPanel from './BiddingPanel/BiddingPanel'
 import Spinner from '../../shared/Spinner/Spinner'
+import { useQuery } from 'react-query'
+import LotCard from '../../shared/LotCard/LotCard'
 
 const LotPage = () => {
   const { id } = useParams();
-  const [lot, setLot] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const bids = useMemo(() => lot?.bids?.sort((a,b) => b.price - a.price) ?? [], [lot.bids]);
+  const getLot = useQuery(['lot', id.toString()], async() => 
+    await axios.get(`lots/${id}`)
+    .then(res => res.data)
+    .catch(() => navigate(-1)), {
+      staleTime: 120000
+    });
+  const lot = useMemo(() => getLot.data ?? null, [getLot.data]);
+
+  const bids = useMemo(() => lot?.bids?.sort((a,b) => b.price - a.price) ?? [], [lot?.bids]);
   const highestBid = useMemo(() => bids[0] ?? null, [bids]);
 
-  useEffect(() => {
-    getLot();
-  },[])
+  const getPopular = useQuery(['popular', id.toString()], async() => 
+    await axios.get('/lots/popular/3').then(res => res.data), {
+        staleTime: 120000
+    });
+  const popular = useMemo(() => getPopular.data?.filter(l => l.id != id) ?? [], [getPopular.data]);
 
-  const getLot = async () => {
-    try {
-      const response = await axios.get(`lots/${id}`)
-      .then(response => response.data);
-      setLot(response);
-      setIsLoading(false);
-    } catch { navigate(-1); }
-  }
-
-  return (isLoading ? <div className="loading-container"><Spinner/></div> :
+  return (getLot.isFetching ? <div className="loading-container"><Spinner/></div> :
     <div className="page-lot-container">
       <div className="lot-page-header">
         <h1 className='go-back-button' onClick={() => navigate('/lots', {replace: true})}>go back</h1>
@@ -99,6 +100,14 @@ const LotPage = () => {
         {(moment(lot.openDate).utc(true).local() <= moment().utc(true).local() &&
           moment(lot.closeDate).local() >= moment().local())
          && <BiddingPanel lot={lot}/>}
+      </div>
+      <div className="recommended-container">
+      <h1 className="lot-title" style={{'marginBottom': '1.5rem', 'fontWeight': '400', 'fontSize': '2rem'}}>You may also like</h1>
+      <div className="recommended-list">
+          {
+            popular.map(l => <LotCard key={l.id} lot={l}/>)
+          }
+      </div>
       </div>
     </div>
   )
